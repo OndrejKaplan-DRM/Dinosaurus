@@ -1,0 +1,55 @@
+
+> dinos-stezka-oziva@2.2.0 test
+> node --test tests/*.test.mjs
+
+✔ compatibility renderer loads the actual 88 GLB frames and paints a real menu (48.304078ms)
+✔ running, jumping, crouching and stumbling render without a GPU (257.419772ms)
+✔ resize uses the actual mobile canvas width and capped pixel ratio (59.119009ms)
+✔ actual Canvas ground moves towards the camera and remains stationary in the menu (75.48218ms)
+✔ actual Three ground UV offset follows the approaching scenery (70.782468ms)
+✔ the mobile grove camera keeps the selected dinosaur visible at both clearing edges (63.55725ms)
+✔ left and right have the correct sign, clamps at the outer lanes (4.795866ms)
+✔ jump clears a rock and lands in a stable state (2.338381ms)
+✔ uncrouched trunk hits the overhead log (3.108389ms)
+✔ a held crouch passes an overhead log without a tail death (1.455525ms)
+✔ releasing crouch under the log waits until the tail has cleared (3.176641ms)
+✔ obstacles in other lanes cannot cause phantom hits (1.86624ms)
+✔ bite stays active for its whole window, so an early bite works (0.978606ms)
+✔ a bite cannot destroy an out-of-reach object or trní (1.020301ms)
+✔ shield grants protection across several simultaneous overlaps (2.277131ms)
+✔ practice catches the stumble and keeps going (1.024258ms)
+✔ pause freezes all simulation state (2.741342ms)
+✔ pickup height follows the body, not just the feet (3.839995ms)
+✔ swept collision cannot tunnel through obstacles at a coarse step (0.345748ms)
+✔ seeded tracks are repeatable and never block all three lanes (72.507996ms)
+✔ reaction gap remains sufficient even at top speed (0.798017ms)
+✔ pooled object count remains bounded through 10 minutes of practice (187.650724ms)
+✔ the minimum crouch can be triggered by a touch swipe (0.924693ms)
+✔ all three amber pickups preserve their two-metre spacing when a row is spawned (0.630139ms)
+✔ a lateral collision during the end of a forward sweep is detected (0.332496ms)
+✔ free movement supports all directions and releasing stops the selected animal (6.007642ms)
+✔ diagonal motion is normalized and sprint is faster (1.407625ms)
+✔ a free jump lands, cannot double jump, and movement stays in the visible clearing (32.309612ms)
+✔ the other animals keep roaming while the selected one stands still; exit returns autonomy (2.011375ms)
+✔ a ground feature travels towards +Z exactly as obstacles do in both renderers (0.859577ms)
+✔ one-song cues never restart over themselves; each source plays its full duration (3.851767ms)
+✔ rapid menu/pause/run/shield changes never overlap music sources (36.341095ms)
+✔ rapid requests keep the original fade deadline and choose the latest cue (0.52759ms)
+✔ a missing decode cannot create a stale asynchronously started song (0.272341ms)
+✔ an old ended callback cannot clear or disconnect the new voice (0.2709ms)
+✔ long suspension or throttled frames cannot stack missed music changes (0.395531ms)
+using deprecated parameters for the initialization function; pass a single object instead
+✔ the supplied GLB contains one usable skeletal animation and a coloured texture reference (1.686575ms)
+✔ procedural crouch lowers the tail while the animated feet stay near ground (121.096117ms)
+✔ crouched body stays below the overhead log through a complete animation cycle (129.352997ms)
+✔ fall reaction never rotates the animal onto its back (30.409956ms)
+✔ bone overlays do not accumulate over repeated run cycles (69.704039ms)
+✔ Rapier debris lands on the actual ground collider (93.780394ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1578.445385

@@ -1,0 +1,250 @@
+[
+  {
+    "id": "menu_a",
+    "source": "Night Menu.mp3",
+    "duration": 214.36,
+    "source_sha256": "765ff78025f368dae9f0c6cc96102b5424355474048643141f7b274c60ddbf63",
+    "before": {
+      "input_i": "-13.99",
+      "input_tp": "-2.71",
+      "input_lra": "8.30",
+      "input_thresh": "-24.16",
+      "output_i": "-18.66",
+      "output_tp": "-7.80",
+      "output_lra": "7.20",
+      "output_thresh": "-28.75",
+      "normalization_type": "dynamic",
+      "target_offset": "-1.34"
+    },
+    "after": {
+      "input_i": "-20.02",
+      "input_tp": "-8.49",
+      "input_lra": "8.40",
+      "input_thresh": "-30.18",
+      "output_i": "-18.67",
+      "output_tp": "-7.66",
+      "output_lra": "7.30",
+      "output_thresh": "-28.76",
+      "normalization_type": "dynamic",
+      "target_offset": "-1.33"
+    },
+    "bytes": 3205786
+  },
+  {
+    "id": "menu_b",
+    "source": "Night Menu (1).mp3",
+    "duration": 223.56,
+    "source_sha256": "d45a1b775d958ac4287b7617b787245f3caa77565ac651f095d788b7513f92d9",
+    "before": {
+      "input_i": "-15.48",
+      "input_tp": "-3.96",
+      "input_lra": "4.50",
+      "input_thresh": "-25.59",
+      "output_i": "-19.02",
+      "output_tp": "-4.10",
+      "output_lra": "3.70",
+      "output_thresh": "-29.07",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.98"
+    },
+    "after": {
+      "input_i": "-20.02",
+      "input_tp": "-8.51",
+      "input_lra": "4.40",
+      "input_thresh": "-30.13",
+      "output_i": "-19.02",
+      "output_tp": "-4.00",
+      "output_lra": "3.60",
+      "output_thresh": "-29.07",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.98"
+    },
+    "bytes": 3428421
+  },
+  {
+    "id": "grove_a",
+    "source": "Lazy Prehistoric Grove.mp3",
+    "duration": 168.0,
+    "source_sha256": "8800dd6a325ffdf76d3e20f8ac30d55597d9a6ace72e0dd9b7e376b13ca47aa8",
+    "before": {
+      "input_i": "-16.72",
+      "input_tp": "-3.68",
+      "input_lra": "6.20",
+      "input_thresh": "-26.94",
+      "output_i": "-19.73",
+      "output_tp": "-5.93",
+      "output_lra": "4.90",
+      "output_thresh": "-29.82",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.27"
+    },
+    "after": {
+      "input_i": "-20.00",
+      "input_tp": "-6.79",
+      "input_lra": "6.10",
+      "input_thresh": "-30.21",
+      "output_i": "-19.73",
+      "output_tp": "-5.94",
+      "output_lra": "4.90",
+      "output_thresh": "-29.83",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.27"
+    },
+    "bytes": 2347438
+  },
+  {
+    "id": "grove_b",
+    "source": "Lazy Prehistoric Grove (1).mp3",
+    "duration": 187.16,
+    "source_sha256": "bda151929bd213eb16d9ba97ab4fd20ff8cc8f60a5b4fba7bc0247bedb9e32a1",
+    "before": {
+      "input_i": "-16.33",
+      "input_tp": "-3.59",
+      "input_lra": "5.40",
+      "input_thresh": "-26.49",
+      "output_i": "-20.19",
+      "output_tp": "-6.85",
+      "output_lra": "5.20",
+      "output_thresh": "-30.28",
+      "normalization_type": "dynamic",
+      "target_offset": "0.19"
+    },
+    "after": {
+      "input_i": "-19.99",
+      "input_tp": "-7.05",
+      "input_lra": "5.30",
+      "input_thresh": "-30.14",
+      "output_i": "-20.19",
+      "output_tp": "-6.72",
+      "output_lra": "5.20",
+      "output_thresh": "-30.28",
+      "normalization_type": "dynamic",
+      "target_offset": "0.19"
+    },
+    "bytes": 2453519
+  },
+  {
+    "id": "run_a",
+    "source": "Agile Exploration.mp3",
+    "duration": 69.96,
+    "source_sha256": "92214af4f2f62b85f5e1255dbd1204bef3d4e13c103e0eba92d08146fb2d083b",
+    "before": {
+      "input_i": "-16.24",
+      "input_tp": "-2.61",
+      "input_lra": "3.60",
+      "input_thresh": "-26.38",
+      "output_i": "-19.58",
+      "output_tp": "-5.39",
+      "output_lra": "2.60",
+      "output_thresh": "-29.65",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.42"
+    },
+    "after": {
+      "input_i": "-20.02",
+      "input_tp": "-6.54",
+      "input_lra": "3.60",
+      "input_thresh": "-30.16",
+      "output_i": "-19.60",
+      "output_tp": "-5.57",
+      "output_lra": "2.60",
+      "output_thresh": "-29.66",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.40"
+    },
+    "bytes": 1056342
+  },
+  {
+    "id": "run_b",
+    "source": "Agile Exploration (1).mp3",
+    "duration": 61.32,
+    "source_sha256": "6d126418a4a01c9925887a1c2022b5699d728cb0881557b5023726e868aa64df",
+    "before": {
+      "input_i": "-15.33",
+      "input_tp": "-4.09",
+      "input_lra": "2.80",
+      "input_thresh": "-25.37",
+      "output_i": "-18.95",
+      "output_tp": "-6.35",
+      "output_lra": "1.70",
+      "output_thresh": "-28.98",
+      "normalization_type": "dynamic",
+      "target_offset": "-1.05"
+    },
+    "after": {
+      "input_i": "-20.04",
+      "input_tp": "-8.39",
+      "input_lra": "2.80",
+      "input_thresh": "-30.08",
+      "output_i": "-18.96",
+      "output_tp": "-6.22",
+      "output_lra": "1.70",
+      "output_thresh": "-28.99",
+      "normalization_type": "dynamic",
+      "target_offset": "-1.04"
+    },
+    "bytes": 967714
+  },
+  {
+    "id": "run_c",
+    "source": "Agile Exploration (2).mp3",
+    "duration": 63.76,
+    "source_sha256": "ea81e4d686b4da05bd7401d780d6e437e8094f1b5f430fd703a663f38ef545a3",
+    "before": {
+      "input_i": "-15.15",
+      "input_tp": "-3.11",
+      "input_lra": "3.70",
+      "input_thresh": "-25.28",
+      "output_i": "-19.35",
+      "output_tp": "-5.28",
+      "output_lra": "2.40",
+      "output_thresh": "-29.42",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.65"
+    },
+    "after": {
+      "input_i": "-20.01",
+      "input_tp": "-8.28",
+      "input_lra": "3.80",
+      "input_thresh": "-30.13",
+      "output_i": "-19.36",
+      "output_tp": "-5.11",
+      "output_lra": "2.40",
+      "output_thresh": "-29.42",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.64"
+    },
+    "bytes": 1014896
+  },
+  {
+    "id": "run_d",
+    "source": "Agile Exploration (3).mp3",
+    "duration": 82.4,
+    "source_sha256": "68f01657a4f38bd9687c6c9ba5bb8dcde4bf2cdcb98e624e8117384161252057",
+    "before": {
+      "input_i": "-15.36",
+      "input_tp": "-3.06",
+      "input_lra": "3.40",
+      "input_thresh": "-25.50",
+      "output_i": "-19.47",
+      "output_tp": "-5.22",
+      "output_lra": "2.60",
+      "output_thresh": "-29.54",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.53"
+    },
+    "after": {
+      "input_i": "-20.01",
+      "input_tp": "-7.96",
+      "input_lra": "3.40",
+      "input_thresh": "-30.15",
+      "output_i": "-19.48",
+      "output_tp": "-5.42",
+      "output_lra": "2.60",
+      "output_thresh": "-29.55",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.52"
+    },
+    "bytes": 1287827
+  }
+]

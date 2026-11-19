@@ -1,0 +1,37 @@
+✔ compatibility renderer loads the actual 88 GLB frames and paints a real menu (41.218046ms)
+✔ running, jumping, crouching and stumbling render without a GPU (297.761783ms)
+✔ resize uses the actual mobile canvas width and capped pixel ratio (40.051898ms)
+✔ left and right have the correct sign, clamps at the outer lanes (1.790309ms)
+✔ jump clears a rock and lands in a stable state (1.050243ms)
+✔ uncrouched trunk hits the overhead log (1.476856ms)
+✔ a held crouch passes an overhead log without a tail death (0.535097ms)
+✔ releasing crouch under the log waits until the tail has cleared (1.119768ms)
+✔ obstacles in other lanes cannot cause phantom hits (0.43842ms)
+✔ bite stays active for its whole window, so an early bite works (0.429457ms)
+✔ a bite cannot destroy an out-of-reach object or trní (0.193341ms)
+✔ shield grants protection across several simultaneous overlaps (0.644241ms)
+✔ practice catches the stumble and keeps going (0.951564ms)
+✔ pause freezes all simulation state (1.154451ms)
+✔ pickup height follows the body, not just the feet (1.45901ms)
+✔ swept collision cannot tunnel through obstacles at a coarse step (0.218149ms)
+✔ seeded tracks are repeatable and never block all three lanes (36.981501ms)
+✔ reaction gap remains sufficient even at top speed (0.193151ms)
+✔ pooled object count remains bounded through 10 minutes of practice (105.393715ms)
+✔ the minimum crouch can be triggered by a touch swipe (0.415516ms)
+✔ all three amber pickups preserve their two-metre spacing when a row is spawned (0.217749ms)
+✔ a lateral collision during the end of a forward sweep is detected (0.110176ms)
+using deprecated parameters for the initialization function; pass a single object instead
+✔ the supplied GLB contains one usable skeletal animation and a coloured texture reference (1.261912ms)
+✔ procedural crouch lowers the tail while the animated feet stay near ground (81.011014ms)
+✔ crouched body stays below the overhead log through a complete animation cycle (132.485519ms)
+✔ fall reaction never rotates the animal onto its back (35.431744ms)
+✔ bone overlays do not accumulate over repeated run cycles (72.365804ms)
+✔ Rapier debris lands on the actual ground collider (68.434949ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 968.342809

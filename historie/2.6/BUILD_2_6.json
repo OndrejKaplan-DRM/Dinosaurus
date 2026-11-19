@@ -1,0 +1,10 @@
+{
+  "version": "2.6.0",
+  "testsPassed": 71,
+  "embeddedBinaryAssets": 36,
+  "embeddedFonts": 4,
+  "needsServer": false,
+  "htmlBytes": 41425916,
+  "browserRendererTested": "canvas2d",
+  "webglBrowserTested": false
+}

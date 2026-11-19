@@ -1,0 +1,71 @@
+
+> dinos-stezka-oziva@2.5.0 test
+> node --test tests/*.test.mjs
+
+✔ compatibility renderer loads the actual 88 GLB frames and paints a real menu (40.01813ms)
+✔ running, jumping, crouching and stumbling render without a GPU (269.735202ms)
+✔ resize uses the actual mobile canvas width and capped pixel ratio (36.609681ms)
+✔ actual Canvas ground moves towards the camera and remains stationary in the menu (68.71514ms)
+✔ actual Three ground UV offset follows the approaching scenery (62.754162ms)
+✔ the mobile grove camera keeps the selected dinosaur visible at both clearing edges (61.868797ms)
+✔ every weather preset renders at day and night with late-game hazards (311.46233ms)
+✔ 3D ground and scenery share route deformation and later vegetation unlocks (35.482722ms)
+✔ all six crouch atlas frames have visibly different stepping poses (16.10259ms)
+✔ left and right have the correct sign, clamps at the outer lanes (2.705013ms)
+✔ jump clears a rock and lands in a stable state (0.701778ms)
+✔ uncrouched trunk hits the overhead log (1.292809ms)
+✔ a held crouch passes an overhead log without a tail death (0.674627ms)
+✔ releasing crouch under the log waits until the tail has cleared (0.843783ms)
+✔ obstacles in other lanes cannot cause phantom hits (0.486704ms)
+✔ bite stays active for its whole window, so an early bite works (0.303468ms)
+✔ a bite cannot destroy an out-of-reach object or trní (0.188374ms)
+✔ shield grants protection across several simultaneous overlaps (0.306001ms)
+✔ practice catches the stumble and keeps going (0.351971ms)
+✔ pause freezes all simulation state (1.051706ms)
+✔ pickup height follows the body, not just the feet (4.332132ms)
+✔ swept collision cannot tunnel through obstacles at a coarse step (0.228946ms)
+✔ seeded tracks are repeatable and never block all three lanes (46.35198ms)
+✔ reaction gap remains sufficient even at top speed (0.295285ms)
+✔ pooled object count remains bounded through 10 minutes of practice (130.174035ms)
+✔ the minimum crouch can be triggered by a touch swipe (0.436258ms)
+✔ all three amber pickups preserve their two-metre spacing when a row is spawned (0.150537ms)
+✔ a lateral collision during the end of a forward sweep is detected (0.094102ms)
+✔ day is 864 active seconds at 1:100 and pause freezes weather (15.965363ms)
+✔ seeded random weather changes and forced presets converge gently (7.622914ms)
+✔ route turns both ways and changes elevation while keeping the player origin stable (5.080376ms)
+✔ water is nonfatal, clears combo once, and jumping avoids the splash (2.477095ms)
+✔ roots are a low jump hazard and unlock only later (1.405198ms)
+✔ changing time scale preserves the current hour (0.379773ms)
+✔ free movement supports all directions and releasing stops the selected animal (3.801822ms)
+✔ diagonal motion is normalized and sprint is faster (0.439843ms)
+✔ a free jump lands, cannot double jump, and movement stays in the visible clearing (9.002965ms)
+✔ the other animals keep roaming while the selected one stands still; exit returns autonomy (1.458239ms)
+✔ a ground feature travels towards +Z exactly as obstacles do in both renderers (0.345761ms)
+✔ short recordings finish naturally and never restart over themselves (3.56115ms)
+✔ rapid menu/pause/run/shield changes never overlap music sources (14.105819ms)
+✔ rapid requests keep the original fade deadline and choose the latest cue (0.369006ms)
+✔ a missing decode cannot create a stale asynchronously started song (0.22577ms)
+✔ an old ended callback cannot clear or disconnect the new voice (0.264278ms)
+✔ long suspension or throttled frames cannot stack missed music changes (0.214113ms)
+✔ start, run, rush, shield and pause preserve a playing exploration song (5.019899ms)
+✔ all four exploration variants play before any repeats (0.217788ms)
+✔ entering the grove transitions to its expanded playlist without overlap (0.575297ms)
+✔ ten minutes of a long-song run rotates through all six eligible songs without overlap (1.380091ms)
+✔ manual next fades once and repeated clicks do not postpone the change (0.408346ms)
+✔ menu reaches both Night Menu and both Lazy Grove recordings before repeating (1.162433ms)
+using deprecated parameters for the initialization function; pass a single object instead
+✔ the supplied GLB contains one usable skeletal animation and a coloured texture reference (1.10433ms)
+✔ procedural crouch lowers the tail while the animated feet stay near ground (84.185982ms)
+✔ crouched body stays below the overhead log through a complete animation cycle (103.584577ms)
+✔ fall reaction never rotates the animal onto its back (21.925279ms)
+✔ bone overlays do not accumulate over repeated run cycles (60.432547ms)
+✔ Rapier debris lands on the actual ground collider (39.074698ms)
+✔ held crouch takes alternating steps, keeps feet above ground and clears the log (111.471349ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1533.51648

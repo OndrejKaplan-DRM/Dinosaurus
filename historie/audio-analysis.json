@@ -1,0 +1,58 @@
+[
+  {
+    "file": "menu_a.ogg",
+    "seconds": 46.83,
+    "peak": 0.5777,
+    "rms": 0.1051,
+    "silent": false
+  },
+  {
+    "file": "menu_b.ogg",
+    "seconds": 49.23,
+    "peak": 0.6061,
+    "rms": 0.1051,
+    "silent": false
+  },
+  {
+    "file": "pause.ogg",
+    "seconds": 56.47,
+    "peak": 0.2441,
+    "rms": 0.06,
+    "silent": false
+  },
+  {
+    "file": "run_a.ogg",
+    "seconds": 34.91,
+    "peak": 0.4987,
+    "rms": 0.105,
+    "silent": false
+  },
+  {
+    "file": "run_b.ogg",
+    "seconds": 33.68,
+    "peak": 0.5359,
+    "rms": 0.1051,
+    "silent": false
+  },
+  {
+    "file": "rush.ogg",
+    "seconds": 28.24,
+    "peak": 0.5172,
+    "rms": 0.1051,
+    "silent": false
+  },
+  {
+    "file": "shield.ogg",
+    "seconds": 32.54,
+    "peak": 0.5406,
+    "rms": 0.1051,
+    "silent": false
+  },
+  {
+    "file": "start.ogg",
+    "seconds": 36.92,
+    "peak": 0.5286,
+    "rms": 0.1051,
+    "silent": false
+  }
+]

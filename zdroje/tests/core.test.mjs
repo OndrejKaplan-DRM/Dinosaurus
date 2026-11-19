@@ -1,0 +1,24 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {Runner,STEP,PACE} from '../src/core.mjs';
+function run(opts={}){const s=new Runner(opts);s.start();s.countdown=0;s.tick(STEP);s.nextAt=1e6;return s;}
+function advance(s,t){for(let i=0;i<Math.ceil(t/STEP);i++)s.tick(STEP);}
+test('left and right have the correct sign, clamps at the outer lanes',()=>{const s=run();s.command('left');advance(s,.2);assert.equal(s.x,-2.35);s.command('left');advance(s,.2);assert.equal(s.x,-2.35);s.command('right');s.command('right');advance(s,.4);assert.equal(s.x,2.35);});
+test('jump clears a rock and lands in a stable state',()=>{const s=run();s.spawn('rock',0,-3);s.command('jump');advance(s,.8);assert.equal(s.phase,'playing');assert.equal(s.y,0);assert.equal(s.grounded,true);});
+test('uncrouched trunk hits the overhead log',()=>{const s=run();s.spawn('log',0,-2);advance(s,.4);assert.equal(s.phase,'stumble');advance(s,.8);assert.equal(s.phase,'dead');});
+test('a held crouch passes an overhead log without a tail death',()=>{const s=run();const o=s.spawn('log',0,-4);s.command('duck');advance(s,1);assert.equal(s.phase,'playing');assert.ok(o.brushed);assert.ok(s.duck>.95);});
+test('releasing crouch under the log waits until the tail has cleared',()=>{const s=run();s.spawn('log',0,-5);s.command('duck');advance(s,.28);s.command('duck',false);advance(s,.3);assert.equal(s.phase,'playing');assert.ok(s.duck>.5);advance(s,.8);assert.ok(s.duck<.05);assert.equal(s.phase,'playing');});
+test('obstacles in other lanes cannot cause phantom hits',()=>{const s=run();s.spawn('thorn',1,-2);advance(s,.5);assert.equal(s.phase,'playing');});
+test('bite stays active for its whole window, so an early bite works',()=>{const s=run();s.spawn('wood',0,-3.5);s.command('bite');advance(s,.32);assert.equal(s.phase,'playing');assert.equal(s.chomps,1);});
+test('a bite cannot destroy an out-of-reach object or trní',()=>{const s=run();s.spawn('wood',1,-2);s.spawn('thorn',0,-2);s.command('bite');advance(s,.3);assert.equal(s.chomps,0);assert.equal(s.phase,'stumble');});
+test('shield grants protection across several simultaneous overlaps',()=>{const s=run();s.shield=1;s.spawn('rock',0,-1);s.spawn('thorn',0,-1.5);advance(s,.4);assert.equal(s.shield,0);assert.equal(s.phase,'playing');assert.ok(s.invincible>0);});
+test('practice catches the stumble and keeps going',()=>{const s=run({practice:true});s.spawn('rock',0,-1);advance(s,1.1);assert.equal(s.phase,'playing');assert.ok(s.invincible>0);});
+test('pause freezes all simulation state',()=>{const s=run();s.command('jump');advance(s,.1);s.pause();const old=[s.distance,s.y,s.time,s.score];advance(s,1);assert.deepEqual([s.distance,s.y,s.time,s.score],old);s.resume();advance(s,.1);assert.ok(s.distance>old[0]);});
+test('pickup height follows the body, not just the feet',()=>{const s=run();s.spawn('amber',0,-.5,1);advance(s,.2);assert.equal(s.amber,1);});
+test('swept collision cannot tunnel through obstacles at a coarse step',()=>{const s=run({difficulty:'dravec'});s.distance=9000;s.spawn('rock',0,-.76);s.tick(.04);assert.equal(s.phase,'stumble');});
+test('seeded tracks are repeatable and never block all three lanes',()=>{for(let seed=1;seed<=300;seed++){const a=run({seed,practice:true,difficulty:'dravec'}),b=run({seed,practice:true,difficulty:'dravec'});a.nextAt=b.nextAt=36;a.distance=b.distance=600;advance(a,.08);advance(b,.08);assert.deepEqual(a.objects,b.objects);const groups=new Map();for(const o of a.objects){if(['amber','shield'].includes(o.kind))continue;const key=Math.round(o.z);const g=groups.get(key)||new Set();g.add(o.lane);groups.set(key,g);}for(const lanes of groups.values())assert.ok(lanes.size<3);}});
+test('reaction gap remains sufficient even at top speed',()=>{for(const p of Object.values(PACE))assert.ok(Math.max(17,p.cap*p.interval)/p.cap>=1.3);});
+test('pooled object count remains bounded through 10 minutes of practice',()=>{const s=run({seed:4,practice:true});s.nextAt=36;advance(s,600);assert.ok(s.distance>1000);assert.ok(s.objects.length<30);});
+test('the minimum crouch can be triggered by a touch swipe',()=>{const s=run();s.spawn('log',0,-3.1);s.command('duck');s.command('duck',false);advance(s,.65);assert.equal(s.phase,'playing');});
+
+test('all three amber pickups preserve their two-metre spacing when a row is spawned',()=>{const s=run();s.rows=6;s.rng=()=>.1;s.nextAt=96;s.tick(STEP);const a=s.objects.filter(o=>o.kind==='amber').map(o=>o.z);assert.equal(a.length,3);assert.ok(Math.abs(a[0]-a[1]-2)<1e-8);assert.ok(Math.abs(a[1]-a[2]-2)<1e-8);assert.ok(a[0]>-100&&a[0]<-95);});
+test('a lateral collision during the end of a forward sweep is detected',()=>{const s=run({difficulty:'dravec'});s.distance=9000;s.x=-1.2;s.lane=0;s.spawn('rock',0,.5);s.tick(.04);assert.equal(s.phase,'stumble');});

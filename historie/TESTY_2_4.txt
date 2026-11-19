@@ -1,0 +1,66 @@
+
+> dinos-stezka-oziva@2.4.0 test
+> node --test tests/*.test.mjs
+
+✔ compatibility renderer loads the actual 88 GLB frames and paints a real menu (54.117983ms)
+✔ running, jumping, crouching and stumbling render without a GPU (293.370493ms)
+✔ resize uses the actual mobile canvas width and capped pixel ratio (34.264162ms)
+✔ actual Canvas ground moves towards the camera and remains stationary in the menu (75.804554ms)
+✔ actual Three ground UV offset follows the approaching scenery (63.39936ms)
+✔ the mobile grove camera keeps the selected dinosaur visible at both clearing edges (79.510095ms)
+✔ every weather preset renders at day and night with late-game hazards (346.794991ms)
+✔ 3D ground and scenery share route deformation and later vegetation unlocks (33.400222ms)
+✔ left and right have the correct sign, clamps at the outer lanes (2.352723ms)
+✔ jump clears a rock and lands in a stable state (1.014558ms)
+✔ uncrouched trunk hits the overhead log (1.910677ms)
+✔ a held crouch passes an overhead log without a tail death (0.935639ms)
+✔ releasing crouch under the log waits until the tail has cleared (0.878313ms)
+✔ obstacles in other lanes cannot cause phantom hits (0.540664ms)
+✔ bite stays active for its whole window, so an early bite works (0.332881ms)
+✔ a bite cannot destroy an out-of-reach object or trní (0.306111ms)
+✔ shield grants protection across several simultaneous overlaps (0.671482ms)
+✔ practice catches the stumble and keeps going (0.538941ms)
+✔ pause freezes all simulation state (1.105164ms)
+✔ pickup height follows the body, not just the feet (5.410928ms)
+✔ swept collision cannot tunnel through obstacles at a coarse step (0.279641ms)
+✔ seeded tracks are repeatable and never block all three lanes (54.450122ms)
+✔ reaction gap remains sufficient even at top speed (0.251499ms)
+✔ pooled object count remains bounded through 10 minutes of practice (152.604013ms)
+✔ the minimum crouch can be triggered by a touch swipe (0.57761ms)
+✔ all three amber pickups preserve their two-metre spacing when a row is spawned (0.193011ms)
+✔ a lateral collision during the end of a forward sweep is detected (0.117057ms)
+✔ day is 864 active seconds at 1:100 and pause freezes weather (18.174531ms)
+✔ seeded random weather changes and forced presets converge gently (6.767622ms)
+✔ route turns both ways and changes elevation while keeping the player origin stable (4.36227ms)
+✔ water is nonfatal, clears combo once, and jumping avoids the splash (1.893221ms)
+✔ roots are a low jump hazard and unlock only later (2.368312ms)
+✔ changing time scale preserves the current hour (4.751966ms)
+✔ free movement supports all directions and releasing stops the selected animal (6.092315ms)
+✔ diagonal motion is normalized and sprint is faster (0.43803ms)
+✔ a free jump lands, cannot double jump, and movement stays in the visible clearing (10.628297ms)
+✔ the other animals keep roaming while the selected one stands still; exit returns autonomy (1.479068ms)
+✔ a ground feature travels towards +Z exactly as obstacles do in both renderers (0.314614ms)
+✔ one-song cues never restart over themselves; each source plays its full duration (3.124335ms)
+✔ rapid menu/pause/run/shield changes never overlap music sources (26.114429ms)
+✔ rapid requests keep the original fade deadline and choose the latest cue (0.354634ms)
+✔ a missing decode cannot create a stale asynchronously started song (0.321804ms)
+✔ an old ended callback cannot clear or disconnect the new voice (0.253652ms)
+✔ long suspension or throttled frames cannot stack missed music changes (0.164418ms)
+✔ start, run, rush, shield and pause preserve a playing exploration song (0.213531ms)
+✔ all four exploration variants play before any repeats (0.207242ms)
+✔ entering the grove transitions from menu to a grove recording with no overlap (0.233782ms)
+using deprecated parameters for the initialization function; pass a single object instead
+✔ the supplied GLB contains one usable skeletal animation and a coloured texture reference (1.303964ms)
+✔ procedural crouch lowers the tail while the animated feet stay near ground (105.224979ms)
+✔ crouched body stays below the overhead log through a complete animation cycle (109.987022ms)
+✔ fall reaction never rotates the animal onto its back (28.962608ms)
+✔ bone overlays do not accumulate over repeated run cycles (59.351725ms)
+✔ Rapier debris lands on the actual ground collider (41.023692ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1606.543113
