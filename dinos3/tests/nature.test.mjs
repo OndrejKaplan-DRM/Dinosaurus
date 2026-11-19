@@ -1,0 +1,170 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import * as T from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { NatureWorld } from '../src/render/nature.mjs';
+import { createNatureLayout, sampleProp, sampleAnimal, WILDLIFE, POND_OUTLINE } from '../src/game/nature-layout.mjs';
+import { createCanvas, Image, Path2D } from '@napi-rs/canvas';
+import { CanvasScene } from '../src/render/canvas-scene.mjs';
+import { Runner } from '../src/game/core.mjs';
+import { Environment } from '../src/game/environment.mjs';
+const dir = new URL('../public/nature/', import.meta.url),
+  manifest = JSON.parse(await readFile(new URL('manifest.json', dir))),
+  bank = { manifest, models: new Map() };
+for (const m of manifest) {
+  const b = await readFile(new URL(m.id + '.glb', dir));
+  assert.equal(b.length, m.bytes);
+  const n = b.readUInt32LE(12),
+    j = JSON.parse(b.subarray(20, 20 + n));
+  assert.ok(j.buffers.every((x) => !x.uri));
+  assert.ok((j.images || []).every((x) => x.bufferView !== undefined));
+  for (const mat of j.materials || []) {
+    for (const k of Object.keys(mat)) if (/Texture$/.test(k)) delete mat[k];
+    for (const k of Object.keys(mat.pbrMetallicRoughness || {})) if (/Texture$/.test(k)) delete mat.pbrMetallicRoughness[k];
+    delete mat.extensions;
+  }
+  delete j.images;
+  delete j.textures;
+  const raw = Buffer.from(JSON.stringify(j)),
+    json = Buffer.concat([raw, Buffer.alloc((4 - (raw.length % 4)) % 4, 32)]),
+    bin = b.subarray(20 + n),
+    h = Buffer.alloc(20);
+  h.writeUInt32LE(0x46546c67, 0);
+  h.writeUInt32LE(2, 4);
+  h.writeUInt32LE(20 + json.length + bin.length, 8);
+  h.writeUInt32LE(json.length, 12);
+  h.writeUInt32LE(0x4e4f534a, 16);
+  const out = Buffer.concat([h, json, bin]),
+    g = await new GLTFLoader().parseAsync(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength), '');
+  bank.models.set(m.id, { ...g, meta: m });
+}
+const world = new NatureWorld(new T.Scene(), bank),
+  s = new Runner();
+s.environment = new Environment(27);
+test('all 43 selected models import as self-contained GLBs', () => {
+  assert.equal(bank.models.size, 43);
+  assert.equal(world.layout.length, 546);
+  assert.equal(world.animals.length, 11);
+  assert.ok(world.batches.length < 150);
+});
+test('layout is repeatable and density zero removes imported vegetation', () => {
+  assert.deepEqual(createNatureLayout(manifest), world.layout);
+  s.environment.options = { density: 0 };
+  assert.ok(world.layout.every((p) => !sampleProp(p, s).visible));
+  s.environment.options = {};
+});
+test('three dinosaurs contain working skeletal walk animation', () => {
+  for (const m of manifest.filter((m) => m.group === 'dinosaur')) {
+    const g = bank.models.get(m.id),
+      mix = new T.AnimationMixer(g.scene),
+      clip = g.animations.find((c) => /walk/i.test(c.name));
+    assert.ok(clip?.tracks.length > 10);
+    mix.clipAction(clip).play();
+    mix.update(0.1);
+    const bones = [];
+    g.scene.traverse((o) => {
+      if (o.isBone) bones.push(o);
+    });
+    const before = bones.map((o) => o.quaternion.clone());
+    mix.update(0.3);
+    assert.ok(
+      bones.some((o, i) => o.quaternion.angleTo(before[i]) > 0.01),
+      m.id,
+    );
+    mix.stopAllAction();
+  }
+});
+test('herd instances use independent bones and pause stops their animation', () => {
+  world.update(s, 0.1);
+  const [a, b] = world.animals;
+  let sa, sb;
+  a.body.traverse((o) => {
+    if (o.isSkinnedMesh) sa = o.skeleton;
+  });
+  b.body.traverse((o) => {
+    if (o.isSkinnedMesh) sb = o.skeleton;
+  });
+  assert.notEqual(sa.bones[0], sb.bones[0]);
+  const time = a.mixer.time;
+  s.phase = 'paused';
+  world.update(s, 0);
+  assert.equal(a.mixer.time, time);
+  s.phase = 'menu';
+});
+test('dinosaurs walk then rest and remain beside the road', () => {
+  const a = WILDLIFE[0],
+    state = (t) => ({ phase: 'menu', environment: { elapsed: t } });
+  assert.notEqual(sampleAnimal(a, 0, state(2)).x, sampleAnimal(a, 0, state(7)).x);
+  assert.equal(sampleAnimal(a, 0, state(12)).x, sampleAnimal(a, 0, state(17)).x);
+  for (const a of WILDLIFE.filter((x) => x.model.startsWith('dinosaur')))
+    for (let t = 0; t < 40; t++) assert.ok(Math.abs(sampleAnimal(a, 0, state(t)).x) > 5);
+});
+test('developer switches affect imported scene and wildlife', () => {
+  s.environment.options = { imported: false };
+  world.update(s, 0.1);
+  assert.equal(world.root.visible, false);
+  s.environment.options = { wildlife: false };
+  world.update(s, 0.1);
+  assert.equal(world.root.visible, true);
+  assert.ok(world.animals.every((a) => !a.g.visible));
+  s.environment.options = {};
+  assert.equal(POND_OUTLINE.length, 36);
+});
+globalThis.Image = Image;
+globalThis.Path2D = Path2D;
+globalThis.window = { devicePixelRatio: 1 };
+globalThis.innerWidth = 960;
+globalThis.innerHeight = 640;
+globalThis.document = { createElement: () => createCanvas(1, 1) };
+const assets = {};
+for (const f of [
+  'fallback/raptor-atlas.webp',
+  'fallback/raptor-atlas.json',
+  'textures/ground.jpg',
+  'textures/rock.jpg',
+  'nature/manifest.json',
+  'nature/atlas.json',
+  'nature/scenery.webp',
+  'nature/fauna.webp',
+])
+  assets[f] = 'data:application/octet-stream;base64,' + (await readFile(new URL('../public/' + f, import.meta.url))).toString('base64');
+const canvas = createCanvas(960, 640),
+  view = await new CanvasScene().init(canvas, (p) => assets[p]);
+test('fallback visibly paints new scenery through all five biomes', () => {
+  assert.equal(view.nature.stats.models, 43);
+  s.phase = 'playing';
+  s.environment.options = {};
+  for (const distance of [0, 1000, 2000, 3100, 4600]) {
+    s.world = s.distance = distance;
+    view.draw(s, 0);
+    const a = canvas.toBuffer('image/png');
+    s.environment.options.imported = false;
+    view.draw(s, 0);
+    const b = canvas.toBuffer('image/png');
+    assert.notDeepEqual(a, b);
+    s.environment.options.imported = true;
+  }
+});
+test('fauna atlas has distinct animated walk frames', () => {
+  const n = view.nature,
+    g = createCanvas(192, 192).getContext('2d');
+  for (const m of Object.values(n.meta.models).filter((x) => x.frames > 1)) {
+    const frames = [];
+    for (let f = 0; f < 6; f++) {
+      const i = m.start + 24 + 6 + f;
+      g.clearRect(0, 0, 192, 192);
+      g.drawImage(n.fauna, (i % 12) * 192, Math.floor(i / 12) * 192, 192, 192, 0, 0, 192, 192);
+      frames.push(g.canvas.toBuffer('image/png').toString('base64'));
+    }
+    assert.ok(new Set(frames).size >= 5);
+  }
+});
+
+test('broad undergrowth leaves all three lanes visually clear', () => {
+  for (const p of world.layout.filter((p) => ['fern', 'understory', 'bush', 'rock', 'mossrock', 'wood', 'flower'].includes(p.group))) {
+    const m = manifest.find((m) => m.id === p.model),
+      radius = Math.max(m.size[0], m.size[2]) * 0.5 * p.scale;
+    assert.ok(Math.abs(p.x) - radius >= 3.6 - 1e-8);
+  }
+});

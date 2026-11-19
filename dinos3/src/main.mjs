@@ -1,0 +1,980 @@
+import { NatureBank, NatureWorld } from './render/nature.mjs';
+import { Developer } from './ui/developer.mjs';
+import { Environment, Atmosphere, route, biome, WEATHER } from './game/environment.mjs';
+import * as T from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { Runner, LANE, STEP, obstacleX } from './game/core.mjs';
+import { Raptor } from './render/raptor.mjs';
+import { World } from './render/world.mjs';
+import { Sound } from './audio/audio.mjs';
+import { TRACKS } from './audio/music.mjs';
+import { Debris } from './render/physics.mjs';
+import { CanvasScene } from './render/canvas-scene.mjs';
+import { Grove } from './game/grove.mjs';
+const $ = (id) => document.getElementById(id),
+  fmt = (x) => Math.floor(x).toLocaleString('cs-CZ'),
+  asset = (p) => window.DINO_ASSETS?.[p] || '/' + p;
+const DEFAULT = {
+  master: 0.8,
+  music: 0.5,
+  sfx: 0.75,
+  ambience: 0.55,
+  difficulty: 'lov',
+  shake: !matchMedia('(prefers-reduced-motion: reduce)').matches,
+  shadows: true,
+  touch: false,
+  renderer: 'auto',
+  weather: 'auto',
+  daylight: 'cycle',
+  timeScale: 100,
+};
+let settings = { ...DEFAULT };
+try {
+  const p = JSON.parse(localStorage.getItem('dinos-settings-v2') || '{}');
+  for (const k of ['master', 'music', 'sfx', 'ambience']) if (Number.isFinite(p[k])) settings[k] = T.MathUtils.clamp(p[k], 0, 1);
+  for (const k of ['shake', 'shadows', 'touch']) if (typeof p[k] === 'boolean') settings[k] = p[k];
+  if (['auto', ...Object.keys(WEATHER)].includes(p.weather)) settings.weather = p.weather;
+  if (['cycle', 'morning', 'noon', 'dusk', 'night'].includes(p.daylight)) settings.daylight = p.daylight;
+  if ([50, 100].includes(p.timeScale)) settings.timeScale = p.timeScale;
+  if (['klid', 'lov', 'dravec'].includes(p.difficulty)) settings.difficulty = p.difficulty;
+} catch {}
+const names = { klid: 'Pohoda', lov: 'Výprava', dravec: 'Dravec' },
+  audio = new Sound(asset, settings),
+  debris = new Debris();
+const grove = new Grove(),
+  environment = new Environment();
+let atmosphere, developer;
+let fallback = null,
+  recovering = false;
+let game,
+  renderer,
+  scene,
+  camera,
+  world,
+  player,
+  wild = [],
+  textures = {},
+  ready = false,
+  panel = '',
+  lastPhase = '',
+  lastHud = 0,
+  best = 0,
+  toastItems = [],
+  visuals = new Map(),
+  pools = new Map(),
+  wire = false,
+  acc = 0,
+  lastTime = 0,
+  stepAt = 0;
+let stats = { fps: 0, frames: 0, time: 0 };
+const tempCam = new T.Vector3(),
+  target = new T.Vector3(),
+  touchMatch = matchMedia('(pointer: coarse)');
+function savePrefs() {
+  try {
+    localStorage.setItem('dinos-settings-v2', JSON.stringify(settings));
+  } catch {}
+  audio.apply();
+  updatePrefs();
+}
+function bestFor(diff = settings.difficulty) {
+  try {
+    const n = Number(localStorage.getItem('dinos-best-' + diff) || (diff === 'lov' ? localStorage.getItem('drap-best') : 0));
+    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  } catch {
+    return 0;
+  }
+}
+function toast(text, small = false) {
+  toastItems.push({ text, small, left: 1.5 });
+  toastItems = toastItems.slice(-3);
+  renderToasts();
+}
+function renderToasts() {
+  $('toasts').replaceChildren(
+    ...toastItems.map((t) => {
+      const d = document.createElement('div');
+      d.className = 'toast' + (t.small ? ' small' : '');
+      d.textContent = t.text;
+      return d;
+    }),
+  );
+}
+function onEvent(e) {
+  fallback?.event(e, game);
+  switch (e.type) {
+    case 'splash':
+      audio.sfx('slide', 0.22, 0.65);
+      toast('Mělký brod · kombo smyto', true);
+      world?.kickDust(game.x, 0, 12);
+      break;
+    case 'start':
+      debris.clear();
+      stepAt = 0;
+      audio.switch('start');
+      break;
+    case 'go':
+      toast('Vyraz!');
+      break;
+    case 'jump':
+      audio.sfx('jump', 0.4);
+      break;
+    case 'land':
+      audio.sfx('thud', 0.28);
+      world?.kickDust(game.x, 0, 7);
+      break;
+    case 'duck':
+      audio.sfx('slide', 0.3, 1.2);
+      world?.kickDust(game.x, 0, 4);
+      break;
+    case 'bite':
+      audio.sfx('bite', 0.5);
+      break;
+    case 'amber':
+      audio.sfx('amber', 0.5, 1 + Math.min(game.combo, 8) * 0.025);
+      break;
+    case 'shield':
+      audio.sfx('shield', 0.5);
+      toast('Štít tě jednou zachrání', true);
+      break;
+    case 'shieldBreak':
+      audio.sfx('shield', 0.55, 0.7);
+      toast('Štít tě zachránil');
+      debris.burst(e.o.lane * LANE, 0.4, e.o.z, 10);
+      break;
+    case 'hit':
+      audio.sfx('crash', 0.5, 1.18);
+      audio.switch('peril');
+      break;
+    case 'break':
+      audio.sfx(e.o.kind === 'wood' ? 'wood' : 'chomp', 0.6);
+      debris.burst(e.o.lane * LANE, 0.2, e.o.z, e.o.kind === 'wood' ? 9 : 4);
+      break;
+    case 'brush':
+      audio.sfx('thud', 0.17, 1.4);
+      debris.burst(e.o.lane * LANE, 1.5, e.o.z, 2);
+      break;
+    case 'reward':
+      if (e.text !== 'Hop!' && e.text !== 'Podlez!') toast('+' + e.gain + ' ' + e.text, true);
+      break;
+    case 'recover':
+      toast('Dinoš běží dál', true);
+      break;
+    case 'milestone':
+      toast(e.distance + ' metrů!');
+      audio.sfx('amber', 0.35, 1.05);
+      break;
+    case 'end':
+      finish();
+      break;
+  }
+}
+function finish() {
+  const old = bestFor(game.difficulty),
+    eligible = !game.practice && !game.dev?.enabled;
+  best = eligible ? Math.max(old, Math.floor(game.score)) : old;
+  const record = eligible && game.score > old;
+  try {
+    if (eligible) localStorage.setItem('dinos-best-' + game.difficulty, String(best));
+  } catch {}
+  $('result-label').textContent = record ? 'NOVÝ REKORD • ' + names[game.difficulty].toUpperCase() : 'KONEC BĚHU';
+  $('result-title').textContent = record ? 'To byla jízda!' : 'I dravec klopýtne.';
+  $('reason').textContent = game.reason;
+  $('result-distance').textContent = fmt(game.distance) + ' m';
+  $('result-score').textContent = fmt(game.score);
+  $('result-amber').textContent = fmt(game.amber);
+  $('result-chomps').textContent = fmt(game.chomps);
+  audio.sfx('fail', 0.25, 1.13);
+}
+function updatePrefs() {
+  for (const key of ['weather', 'daylight', 'timeScale']) $(key).value = settings[key];
+  for (const key of ['master', 'music', 'sfx', 'ambience']) {
+    $(key).value = Math.round(settings[key] * 100);
+    $(key + '-value').textContent = Math.round(settings[key] * 100) + ' %';
+  }
+  for (const key of ['shake', 'shadows', 'touch']) $(key).checked = settings[key];
+  document.querySelectorAll('[data-diff]').forEach((b) => b.classList.toggle('selected', b.dataset.diff === settings.difficulty));
+  $('difficulty-caption').textContent = names[settings.difficulty];
+  $('best').textContent = fmt(bestFor());
+  $('sound').textContent = settings.master > 0 ? '♫' : '♪';
+  $('sound').setAttribute('aria-label', audio.unlocked && settings.master > 0 ? 'Vypnout zvuk' : 'Zapnout zvuk');
+}
+function start(practice = false) {
+  if (!ready) return;
+  developer?.reset(true);
+  grove.leave();
+  panel = '';
+  game.practice = practice;
+  game.difficulty = practice ? 'klid' : settings.difficulty;
+  game.start();
+  held.clear();
+  toastItems = [];
+  renderToasts();
+  updateUI();
+}
+function togglePause() {
+  if (panel) return;
+  if (game.phase === 'playing' || game.phase === 'ready') game.pause();
+  else if (game.phase === 'paused') game.resume();
+  updateUI();
+}
+function action(a) {
+  if (a === 'retry') {
+    location.reload();
+    return;
+  }
+  void audio.unlock();
+  audio.sfx('click', 0.18);
+  if (a === 'start') start(false);
+  else if (a === 'practice') start(true);
+  else if (a === 'restart') {
+    if (game.dev?.enabled) developer.preview();
+    else start(game.practice);
+  } else if (a === 'roam') {
+    panel = '';
+    grove.enter();
+    clearInput();
+  } else if (a === 'leave-roam') {
+    grove.leave();
+    clearInput();
+  } else if (a === 'menu') {
+    grove.leave();
+    panel = '';
+    game.menu();
+    debris.clear();
+    updatePrefs();
+  } else if (a === 'pause' || a === 'resume') togglePause();
+  else if (a === 'settings' || a === 'help' || a === 'developer') {
+    if (['playing', 'ready'].includes(game.phase)) game.pause();
+    clearInput();
+    panel = a;
+    updatePrefs();
+  } else if (a === 'close') panel = '';
+  updateUI();
+  document.activeElement?.blur();
+}
+function updateUI() {
+  const p = game.phase,
+    menu = p === 'menu';
+  document.body.classList.toggle('in-menu', menu);
+  document.body.classList.toggle('in-grove', menu && grove.active);
+  document.body.classList.toggle('in-run', !menu);
+  document.body.classList.toggle('touch', settings.touch || touchMatch.matches);
+  $('menu').hidden = !menu || grove.active || Boolean(panel);
+  $('grove').hidden = !menu || !grove.active || Boolean(panel);
+  $('grove-pads').hidden = !(menu && grove.active && !panel && (settings.touch || touchMatch.matches));
+  $('pause').hidden = p !== 'paused' || Boolean(panel);
+  $('results').hidden = p !== 'dead' || Boolean(panel);
+  $('settings').hidden = panel !== 'settings';
+  $('help').hidden = panel !== 'help';
+  $('developer').hidden = panel !== 'developer';
+  $('hud').hidden = menu || p === 'dead' || Boolean(panel);
+  $('pads').hidden = !(p === 'playing' && !panel && (settings.touch || touchMatch.matches));
+  $('countdown').hidden = p !== 'ready' || Boolean(panel);
+  $('mode-label').textContent = game.dev?.enabled
+    ? 'VÝVOJÁŘ · BEZ REKORDŮ'
+    : game.practice
+      ? 'KLIDNÁ VÝPRAVA'
+      : names[game.difficulty].toUpperCase();
+  lastPhase = p;
+}
+function setupUI() {
+  for (const key of ['weather', 'daylight', 'timeScale'])
+    $(key).addEventListener('change', () => {
+      settings[key] = key === 'timeScale' ? Number($(key).value) : $(key).value;
+      savePrefs();
+    });
+  document.querySelectorAll('[data-action]').forEach((b) => b.addEventListener('click', () => action(b.dataset.action)));
+  document.querySelectorAll('[data-diff]').forEach((b) =>
+    b.addEventListener('click', () => {
+      settings.difficulty = b.dataset.diff;
+      savePrefs();
+    }),
+  );
+  for (const k of ['master', 'music', 'sfx', 'ambience'])
+    $(k).addEventListener('input', () => {
+      settings[k] = Number($(k).value) / 100;
+      void audio.unlock();
+      savePrefs();
+    });
+  for (const k of ['shake', 'shadows', 'touch'])
+    $(k).addEventListener('change', () => {
+      settings[k] = $(k).checked;
+      savePrefs();
+      updateUI();
+    });
+  $('sound').onclick = async () => {
+    const locked = !audio.unlocked;
+    await audio.unlock();
+    if (settings.master === 0) settings.master = 0.8;
+    else if (!locked) settings.master = 0;
+    savePrefs();
+  };
+  $('next-song').onclick = async () => {
+    await audio.unlock();
+    audio.player?.next();
+  };
+  $('next-song-settings').onclick = $('next-song').onclick;
+  $('full').onclick = () => {
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else document.documentElement.requestFullscreen?.().catch(() => toast('Celá obrazovka není dostupná', true));
+  };
+  for (const b of document.querySelectorAll('[data-control]')) {
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      b.setPointerCapture(e.pointerId);
+      void audio.unlock();
+      game.command(b.dataset.control);
+    });
+    for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture'])
+      b.addEventListener(ev, () => game.command(b.dataset.control, false));
+  }
+  for (const b of document.querySelectorAll('[data-grove]')) {
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      b.setPointerCapture(e.pointerId);
+      grovePointer.set(e.pointerId, b.dataset.grove);
+      syncGroveInput();
+      if (b.dataset.grove === 'jump') grove.command('jump');
+      void audio.unlock();
+    });
+    for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture'])
+      b.addEventListener(ev, (e) => {
+        grovePointer.delete(e.pointerId);
+        syncGroveInput();
+      });
+  }
+  updatePrefs();
+}
+const grovePointer = new Map(),
+  groveCodes = {
+    ArrowLeft: 'left',
+    KeyA: 'left',
+    ArrowRight: 'right',
+    KeyD: 'right',
+    ArrowUp: 'forward',
+    KeyW: 'forward',
+    ArrowDown: 'back',
+    KeyS: 'back',
+    ShiftLeft: 'sprint',
+    ShiftRight: 'sprint',
+    Space: 'jump',
+  };
+function syncGroveInput() {
+  grove.release();
+  if (panel) return;
+  for (const code of held) {
+    const cmd = groveCodes[code];
+    if (cmd && cmd !== 'jump') grove.keys.add(cmd);
+  }
+  for (const cmd of grovePointer.values()) if (cmd !== 'jump') grove.keys.add(cmd);
+}
+function clearInput() {
+  held.clear();
+  grovePointer.clear();
+  grove.release();
+  game.duckHold = false;
+}
+const held = new Set(),
+  commands = {
+    ArrowLeft: 'left',
+    KeyA: 'left',
+    ArrowRight: 'right',
+    KeyD: 'right',
+    ArrowUp: 'jump',
+    KeyW: 'jump',
+    ArrowDown: 'duck',
+    KeyS: 'duck',
+    Space: 'bite',
+  };
+function installInput() {
+  window.addEventListener('keydown', (e) => {
+    const inField = ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+    if (e.code === 'Escape') {
+      e.preventDefault();
+      if (panel) {
+        panel = '';
+        updateUI();
+      } else if (grove.active) {
+        grove.leave();
+        clearInput();
+        updateUI();
+      } else if (game.phase === 'dead') {
+        game.menu();
+        updatePrefs();
+        updateUI();
+      } else togglePause();
+      return;
+    }
+    if (inField) return;
+    if (commands[e.code] || ['Enter', 'KeyP'].includes(e.code)) e.preventDefault();
+    if (e.repeat) return;
+    if (grove.active && game.phase === 'menu' && !panel && groveCodes[e.code]) {
+      e.preventDefault();
+      held.add(e.code);
+      syncGroveInput();
+      if (e.code === 'Space') grove.command('jump');
+      void audio.unlock();
+      return;
+    }
+    if (e.code === 'F3') {
+      e.preventDefault();
+      action('developer');
+      return;
+    }
+    if (e.code === 'KeyN') {
+      e.preventDefault();
+      void audio.unlock().then(() => audio.player?.next());
+      return;
+    }
+    if (e.code === 'KeyP') {
+      togglePause();
+      return;
+    }
+    if (e.code === 'F2') {
+      e.preventDefault();
+      wire = !wire;
+      toast(wire ? 'Kontrola kolizí zapnuta' : 'Kontrola kolizí vypnuta', true);
+      return;
+    }
+    if (panel) return;
+    if (['Enter', 'Space'].includes(e.code) && ['menu', 'dead'].includes(game.phase)) {
+      action(game.phase === 'dead' ? 'restart' : 'start');
+      return;
+    }
+    if (e.code === 'Enter' && game.phase === 'paused') {
+      action('resume');
+      return;
+    }
+    if (e.code === 'KeyR' && game.phase === 'dead') {
+      action('restart');
+      return;
+    }
+    if (commands[e.code]) {
+      held.add(e.code);
+      game.command(commands[e.code]);
+      void audio.unlock();
+    }
+  });
+  window.addEventListener('keyup', (e) => {
+    held.delete(e.code);
+    syncGroveInput();
+    if (commands[e.code] === 'duck' && !held.has('ArrowDown') && !held.has('KeyS')) game.command('duck', false);
+  });
+  const blur = () => {
+    clearInput();
+    game.pause();
+    updateUI();
+    audio.suspend();
+  };
+  window.addEventListener('blur', blur);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) blur();
+  });
+  window.addEventListener('focus', () => {
+    if (audio.unlocked) void audio.unlock();
+    lastTime = performance.now();
+    acc = 0;
+  });
+  bindCanvasInput($('scene'));
+}
+function bindCanvasInput(canvas) {
+  let swipe = null;
+  canvas.addEventListener('pointerdown', (e) => {
+    void audio.unlock();
+    swipe = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointerup', (e) => {
+    if (!swipe) return;
+    if (grove.active && game.phase === 'menu' && !panel) {
+      if (Math.hypot(e.clientX - swipe.x, e.clientY - swipe.y) < 25) grove.command('jump');
+      swipe = null;
+      return;
+    }
+    if (game.phase !== 'playing') {
+      swipe = null;
+      return;
+    }
+    const dx = e.clientX - swipe.x,
+      dy = e.clientY - swipe.y;
+    swipe = null;
+    if (Math.hypot(dx, dy) < 25) game.command('bite');
+    else if (Math.abs(dx) > Math.abs(dy)) game.command(dx > 0 ? 'right' : 'left');
+    else {
+      const cmd = dy > 0 ? 'duck' : 'jump';
+      game.command(cmd);
+      if (cmd === 'duck') game.command(cmd, false);
+    }
+  });
+  canvas.addEventListener('pointercancel', () => {
+    swipe = null;
+    game.duckHold = false;
+  });
+}
+function updateHud() {
+  const s = game;
+  $('environment-label').textContent = environment.label + ' · ' + biome(s.phase === 'menu' ? 0 : s.distance);
+  $('now-playing').textContent = audio.song && settings.master > 0 && settings.music > 0 ? '♫ ' + TRACKS[audio.song] : '';
+  const label = audio.unlocked && settings.master > 0 ? 'Vypnout zvuk' : 'Zapnout zvuk';
+  if ($('sound').getAttribute('aria-label') !== label) $('sound').setAttribute('aria-label', label);
+  $('metres').textContent = fmt(s.distance);
+  $('score').textContent = fmt(s.score);
+  $('speed').textContent = fmt(s.speed * 3.6) + ' km/h';
+  $('combo').textContent = s.combo > 1 ? '×' + s.combo : '';
+  $('shield-state').textContent = s.shield ? '◇  Štít připraven' : '';
+  $('countdown').textContent = s.countdown > 0.65 ? 'Připrav se…' : s.countdown > 0.25 ? 'Na stezku…' : 'Běž!';
+  const o = s.objects
+    .filter((o) => o.active && o.z < 0 && o.z > -Math.max(12, s.speed * 1.3) && Math.abs(s.x - obstacleX(o, s.time, s.dev)) < 1.1)
+    .sort((a, b) => b.z - a.z)[0];
+  const hints = {
+    rollingWood: '↑  Přeskoč kutálející se větev',
+    rollingRock: '↑  Přeskoč pohyblivý kámen',
+    root: '↑  Přeskoč kořeny',
+    pool: '↑  Přeskoč vodu a zachovej kombo',
+    rock: '↑  Přeskoč kámen',
+    log: '↓  Podlez kmen',
+    wood: 'MEZERNÍK  •  Křupni větev',
+    snack: 'MEZERNÍK  •  Kořist',
+    thorn: '← →  Vyhni se trní',
+    shield: '◇  Ochranný štít',
+    amber: '◆  Posbírej jantar',
+  };
+  $('context-hint').textContent = s.phase === 'playing' && o && (s.distance < 230 || s.practice) ? hints[o.kind] : '';
+}
+function showObstacle(o) {
+  let rec = visuals.get(o.id);
+  if (!rec) {
+    let pool = pools.get(o.kind);
+    if (!pool) {
+      pool = [];
+      pools.set(o.kind, pool);
+    }
+    rec = pool.find((r) => !r.used);
+    if (!rec) {
+      const group = world.makeObstacle(o.kind, textures, o.id);
+      scene.add(group);
+      rec = { group, used: false, kind: o.kind };
+      pool.push(rec);
+    }
+    rec.used = true;
+    visuals.set(o.id, rec);
+  }
+  return rec.group;
+}
+function updateVisuals(dt) {
+  const s = game,
+    menu = s.phase === 'menu';
+  for (const [id, rec] of visuals)
+    if (!s.objects.some((o) => o.id === id && o.active) || menu) {
+      rec.used = false;
+      rec.group.visible = false;
+      visuals.delete(id);
+    }
+  for (const o of s.objects) {
+    if (!o.active || menu) continue;
+    const g = showObstacle(o);
+    g.visible = true;
+    const bend = route(s.world, o.z, menu);
+    g.position.set(obstacleX(o, s.time, s.dev) + bend.x, o.y + bend.y, o.z);
+    g.rotation.set(0, 0, 0);
+    if (o.kind === 'rollingWood' || o.kind === 'rollingRock') {
+      g.rotation.y = Math.sin(s.time * 1.6 + o.id * 2.4) * 0.4;
+      g.children[0].rotation.x = s.dev?.moving === false ? 0 : s.time * 1.6;
+    }
+    if (o.kind === 'amber' || o.kind === 'shield') {
+      g.position.y += Math.sin(s.time * 3 + o.id) * 0.12;
+      g.rotation.y = s.time * 1.1 + o.id;
+      g.rotation.z = Math.sin(s.time * 2 + o.id) * 0.13;
+    }
+    if (o.kind === 'log' && o.brushed) {
+      o.bend = Math.max(0, o.bend - dt * 2);
+      g.position.y += Math.sin(o.bend * Math.PI) * 0.2;
+      g.rotation.z = Math.sin(o.bend * Math.PI * 3) * 0.08;
+    }
+  }
+  player.root.visible = !menu;
+  if (!menu) player.update(dt, s);
+  for (let i = 0; i < wild.length; i++) {
+    const a = wild[i],
+      w = grove.animals[i];
+    a.root.visible = menu;
+    if (!menu) continue;
+    a.root.rotation.set(0, w.yaw, 0);
+    a.root.position.set(w.x, w.y, w.z);
+    a.update(dt, s, { wild: true, speed: w.speed * 0.7 });
+    world.shadows[i + 1].visible = true;
+    world.shadows[i + 1].position.set(w.x, 0.027, w.z);
+    world.shadows[i + 1].scale.setScalar(0.7);
+  }
+  if (groveRing) {
+    groveRing.visible = menu && grove.active;
+    groveRing.position.set(grove.animals[0].x, 0.04, grove.animals[0].z);
+  }
+  for (let i = 1; i < world.shadows.length; i++) world.shadows[i].visible = menu;
+  const sh = world.shadows[0];
+  sh.visible = !menu;
+  sh.position.set(s.x, 0.029, 0);
+  sh.scale.setScalar(1 + s.y * 0.15);
+  sh.material.opacity = 0.4 / (1 + s.y * 0.7);
+  world.update(s, dt, menu);
+  debris.draw();
+  const mobile = innerWidth < 720,
+    shake = settings.shake ? s.shake : 0;
+  tempCam.set(
+    menu ? (grove.active ? grove.animals[0].x * (mobile ? 1 : 0.5) : mobile ? 3.0 : 3.6) : s.x * 0.32,
+    menu ? (grove.active ? 4.2 : 2.8) : 3.15 + s.y * 0.1,
+    menu ? (grove.active ? 11 : mobile ? 9 : 7.5) : 7.8,
+  );
+  if (shake > 0 && s.phase !== 'paused') {
+    tempCam.x += Math.sin(s.time * 52) * shake * 0.3;
+    tempCam.y += Math.cos(s.time * 63) * shake * 0.18;
+  }
+  camera.position.lerp(tempCam, 1 - Math.exp(-dt * 5));
+  target.set(
+    menu ? (grove.active ? grove.animals[0].x * (mobile ? 1 : 0.5) : mobile ? -0.8 : 0) : s.x * 0.12,
+    menu ? 1.15 : 1.0 + s.y * 0.08,
+    menu ? -4.5 : -9,
+  );
+  camera.lookAt(target);
+  camera.fov = mobile ? 65 : 54;
+  if (!menu) camera.fov += Math.max(0, s.speed - 11) * 0.18;
+  camera.updateProjectionMatrix();
+  renderer.shadowMap.enabled = settings.shadows;
+  // Slow warm / cool variation follows distance, never a distracting abrupt biome switch.
+  const light = Math.sin(s.distance * 0.0017) * 0.5 + 0.5;
+  $('flash').style.opacity = Math.min(0.15, s.flash * 0.3).toFixed(3);
+  if (debugBody) {
+    debugBody.visible = wire && !menu;
+    debugBody.position.set(s.x, s.y + (s.duck > 0.25 ? 0.4 : 0.78), 0);
+    debugBody.scale.set(0.62, s.duck > 0.25 ? 0.7 : 1.4, 0.7);
+  }
+}
+let debugBody, groveRing;
+function loadWithDeadline(promise, ms = 25000) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Načítání trvá příliš dlouho')), ms);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+async function initCanvas() {
+  const old = $('scene'),
+    canvas = old.cloneNode(false);
+  old.replaceWith(canvas);
+  bindCanvasInput(canvas);
+  if (renderer) {
+    renderer.dispose();
+    renderer = null;
+  }
+  fallback = await new CanvasScene().init(canvas, asset);
+  fallback.settings = settings;
+  $('renderer-status').textContent = 'Úsporné vykreslování';
+  document.body.dataset.renderer = 'canvas2d';
+}
+function completeBoot() {
+  ready = true;
+  $('boot').hidden = true;
+  $('interface').hidden = false;
+  updateUI();
+  window.addEventListener('resize', () => {
+    atmosphere.resize();
+    if (fallback) fallback.resize();
+    else if (renderer) {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 720 ? 1.3 : 1.6));
+    }
+    updateUI();
+  });
+  lastTime = performance.now();
+  requestAnimationFrame(frame);
+}
+async function init() {
+  game = new Runner({ seed: Date.now(), onEvent });
+  game.grove = grove;
+  game.environment = environment;
+  atmosphere = new Atmosphere($('atmosphere'));
+  developer = new Developer({
+    game,
+    environment,
+    settings,
+    audio,
+    startPreview: () => {
+      grove.leave();
+      panel = '';
+      clearInput();
+      updateUI();
+    },
+    setWire: (v) => (wire = v),
+  });
+  setupUI();
+  installInput();
+  const canvas = $('scene');
+  let context = null;
+  try {
+    context = canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' });
+  } catch {}
+  if (!context) {
+    $('loadtext').textContent = 'Připravuji úsporné vykreslování…';
+    await initCanvas();
+    completeBoot();
+    return;
+  }
+  try {
+    await init3D(context);
+  } catch (error) {
+    console.warn('3D není dostupné, přecházím na Canvas 2D:', error.message);
+    $('loadtext').textContent = 'Spouštím úsporné vykreslování…';
+    await initCanvas();
+  }
+  completeBoot();
+}
+async function init3D(context) {
+  renderer = new T.WebGLRenderer({ canvas: $('scene'), context, antialias: true, alpha: false, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.outputColorSpace = T.SRGBColorSpace;
+  renderer.toneMapping = T.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.12;
+  renderer.shadowMap.enabled = settings.shadows;
+  renderer.shadowMap.type = T.PCFSoftShadowMap;
+  scene = new T.Scene();
+  scene.background = new T.Color('#b5c5a2');
+  scene.fog = new T.Fog('#bac4a5', 34, 112);
+  camera = new T.PerspectiveCamera(54, innerWidth / innerHeight, 0.1, 200);
+  camera.position.set(9, 3.5, 10);
+  scene.add(new T.HemisphereLight(0xe0f3ff, 0x56714d, 2.2));
+  const sun = new T.DirectionalLight(0xffdf9e, 2.3);
+  sun.position.set(-9, 16, 6);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.camera.left = -15;
+  sun.shadow.camera.right = 15;
+  sun.shadow.camera.top = 19;
+  sun.shadow.camera.bottom = -16;
+  sun.shadow.camera.far = 70;
+  sun.shadow.normalBias = 0.06;
+  sun.shadow.bias = -0.0002;
+  sun.target.position.set(0, 0, -9);
+  scene.add(sun, sun.target);
+  const rim = new T.DirectionalLight(0xb3deff, 0.8);
+  rim.position.set(6, 7, -8);
+  scene.add(rim);
+  const loader = new T.TextureLoader();
+  await loadWithDeadline(
+    Promise.all(
+      ['ground', 'rock', 'wood'].map(async (name) => {
+        const tex = await loader.loadAsync(asset('textures/' + name + '.jpg'));
+        tex.colorSpace = T.SRGBColorSpace;
+        tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+        textures[name] = tex;
+      }),
+    ),
+  );
+  $('loadtext').textContent = 'Dinoš si protahuje nohy…';
+  const gltf = await loadWithDeadline(new GLTFLoader().loadAsync(asset('models/raptor.glb')));
+  gltf.scene.traverse((o) => {
+    if (o.isSkinnedMesh && o.material.map) {
+      o.material.map.colorSpace = T.SRGBColorSpace;
+      o.material.map.anisotropy = 8;
+    }
+  });
+  groveRing = new T.Mesh(
+    new T.RingGeometry(0.57, 0.6, 40),
+    new T.MeshBasicMaterial({ color: 0xffe3a0, side: T.DoubleSide, transparent: true, opacity: 0.85, depthWrite: false }),
+  );
+  groveRing.rotation.x = -Math.PI / 2;
+  scene.add(groveRing);
+  $('loadtext').textContent = 'Probouzím les…';
+  const nature = await loadWithDeadline(new NatureBank().load(asset), 60000);
+  world = new World(scene, textures);
+  world.nature = new NatureWorld(scene, nature);
+  player = new Raptor(gltf);
+  scene.add(player.root);
+  const tints = [0xffffff, 0xc2d6b2, 0xe3c79e, 0xb4c2ab];
+  for (let i = 0; i < 4; i++) {
+    const a = new Raptor(gltf, { height: i === 0 ? 1.82 : 1.28 + i * 0.1, tint: tints[i], offset: i * 0.23 });
+    a.motion = { x: i === 0 ? 2.2 : 1 + i * 0.8, z: i === 0 ? 0.2 : -2 - i * 2.5 };
+    a.root.position.set(a.motion.x, 0, a.motion.z);
+    wild.push(a);
+    scene.add(a.root);
+  }
+  try {
+    await loadWithDeadline(debris.init(scene, textures.wood), 10000);
+  } catch (error) {
+    console.warn('Drobné úlomky nejsou dostupné:', error.message);
+    debris.world = null;
+  }
+  debugBody = new T.Mesh(new T.BoxGeometry(1, 1, 1), new T.MeshBasicMaterial({ wireframe: true, color: 0x68ffee, depthTest: false }));
+  scene.add(debugBody);
+  debugBody.visible = false;
+  $('renderer-status').textContent = '3D vykreslování';
+  document.body.dataset.renderer = 'webgl2';
+  $('scene').addEventListener(
+    'webglcontextlost',
+    (e) => {
+      e.preventDefault();
+      void recoverRenderer(new Error('3D kontext byl přerušen'));
+    },
+    { once: true },
+  );
+}
+function diagnostics() {
+  return {
+    version: '2.7.1',
+    nature: (world?.nature || fallback?.nature)?.stats || null,
+    ready,
+    renderer: fallback ? 'canvas2d' : 'webgl2',
+    phase: game.phase,
+    distance: +game.distance.toFixed(2),
+    score: Math.floor(game.score),
+    x: +game.x.toFixed(3),
+    y: +game.y.toFixed(3),
+    duck: +game.duck.toFixed(3),
+    shield: game.shield,
+    objects: game.objects.length,
+    practice: game.practice,
+    developer: game.dev || {},
+    skyLayer: 'background',
+    grove: {
+      active: grove.active,
+      x: +grove.animals[0].x.toFixed(3),
+      z: +grove.animals[0].z.toFixed(3),
+      y: +grove.animals[0].y.toFixed(3),
+      speed: +grove.animals[0].speed.toFixed(3),
+    },
+    environment: {
+      hour: +environment.hour.toFixed(2),
+      weather: environment.mode,
+      rain: +environment.rain.toFixed(2),
+      day: +environment.day.toFixed(2),
+      biome: biome(game.distance),
+    },
+    audio: {
+      state: audio.ctx?.state || 'locked',
+      decoded: audio.loadsOK,
+      cue: audio.cue,
+      song: audio.song,
+      voices: audio.player?.activeCount || 0,
+      starts: audio.player?.starts || 0,
+      failures: audio.errors?.length || 0,
+    },
+    fps: stats.fps,
+    drawMs: Math.round(stats.drawMs || 0),
+  };
+}
+window.dinosDiagnostics = () => diagnostics();
+async function recoverRenderer(error) {
+  if (recovering) return;
+  recovering = true;
+  game.pause();
+  updateUI();
+  try {
+    if (fallback) throw error;
+    await initCanvas();
+    toast('Hra pokračuje v úsporném vykreslování', true);
+    recovering = false;
+    lastTime = performance.now();
+    acc = 0;
+    requestAnimationFrame(frame);
+  } catch (e) {
+    showError(e);
+  }
+}
+function showError(error) {
+  ready = false;
+  $('boot').hidden = false;
+  $('boot').classList.add('error');
+  $('boot').querySelector('strong').textContent = 'Stezka se nenačetla';
+  $('loadtext').textContent = 'Načítání se přerušilo. ' + error.message;
+  $('retry').hidden = false;
+  console.error(error);
+}
+function frame(now) {
+  if (recovering) return;
+  try {
+    if (document.hidden) {
+      lastTime = now;
+      acc = 0;
+      requestAnimationFrame(frame);
+      return;
+    }
+    const raw = Math.max(0, (now - lastTime) / 1000),
+      dt = Math.min(raw, 0.1);
+    lastTime = now;
+    acc += dt;
+    let steps = 0;
+    while (acc >= STEP && steps < 12) {
+      game.tick(STEP);
+      environment.tick(STEP, settings, ['paused', 'dead'].includes(game.phase) || Boolean(panel));
+      if (game.phase === 'menu' && !panel) grove.tick(STEP);
+      if (!['paused', 'dead', 'menu'].includes(game.phase)) debris.step(STEP);
+      acc -= STEP;
+      steps++;
+    }
+    if (steps === 12) acc = 0;
+    if (lastPhase !== game.phase) updateUI();
+    const live = game.phase === 'playing';
+    audio.switch(
+      game.phase === 'menu'
+        ? grove.active
+          ? 'grove'
+          : 'menu'
+        : game.phase === 'paused'
+          ? 'pause'
+          : ['dead', 'stumble'].includes(game.phase)
+            ? 'peril'
+            : game.phase === 'ready' || game.distance < 20
+              ? 'start'
+              : game.shield
+                ? 'shield'
+                : game.speed > 18
+                  ? 'rush'
+                  : 'run',
+    );
+    audio.update();
+    audio.weather(environment);
+    if (live && game.grounded && game.time >= stepAt) {
+      audio.sfx('step' + Math.floor(Math.random() * 3), game.duck > 0.4 ? 0.065 : 0.11, 0.95 + game.speed * 0.015);
+      world?.kickDust(game.x, 0, 2);
+      fallback?.kickDust(game.x, 0, 2);
+      stepAt = game.time + (game.duck > 0.4 ? 2.1 / game.speed : Math.max(0.15, 0.31 - game.speed * 0.004));
+    }
+    let changed = false;
+    for (const t of toastItems) t.left -= dt;
+    if (toastItems.some((t) => t.left <= 0)) {
+      toastItems = toastItems.filter((t) => t.left > 0);
+      changed = true;
+    }
+    if (changed) renderToasts();
+    if (now - lastHud > 80) {
+      updateHud();
+      lastHud = now;
+      $('runtime-probe').dataset.state = JSON.stringify(diagnostics());
+      developer.status(diagnostics());
+    }
+    const paintStart = performance.now();
+    const visualDt = ['paused', 'dead'].includes(game.phase) ? 0 : dt;
+    if (fallback) fallback.draw(game, visualDt, wire);
+    else {
+      updateVisuals(visualDt);
+      renderer.render(scene, camera);
+    }
+    atmosphere.draw(environment, !settings.shake);
+    stats.drawMs = performance.now() - paintStart;
+    stats.frames++;
+    stats.time += raw;
+    if (stats.time > 1) {
+      stats.fps = Math.round(stats.frames / stats.time);
+      stats.frames = stats.time = 0;
+    }
+    requestAnimationFrame(frame);
+  } catch (error) {
+    void recoverRenderer(error);
+  }
+}
+init().catch(showError);

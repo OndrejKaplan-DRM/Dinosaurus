@@ -1,0 +1,81 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Grove, GROVE_BOUNDS } from '../src/game/grove.mjs';
+import { groundCoordinate, groundOffset } from '../src/game/motion.mjs';
+const step = (g, t) => {
+  for (let i = 0; i < t * 120; i++) g.tick(1 / 120);
+};
+test('free movement supports all directions and releasing stops the selected animal', () => {
+  const g = new Grove();
+  g.enter();
+  const a = g.animals[0],
+    z = a.z;
+  g.command('forward');
+  step(g, 0.5);
+  assert.ok(a.z < z - 1);
+  g.release();
+  const p = [a.x, a.z, a.gait];
+  step(g, 1);
+  assert.deepEqual([a.x, a.z, a.gait], p);
+  g.command('back');
+  g.command('left');
+  step(g, 0.5);
+  assert.ok(a.x < p[0] && a.z > p[1]);
+});
+test('diagonal motion is normalized and sprint is faster', () => {
+  const straight = new Grove(),
+    diagonal = new Grove();
+  for (const g of [straight, diagonal]) {
+    g.enter();
+    g.command('forward');
+  }
+  diagonal.command('left');
+  step(straight, 0.1);
+  step(diagonal, 0.1);
+  assert.ok(Math.abs(straight.animals[0].speed - diagonal.animals[0].speed) < 1e-10);
+  straight.command('sprint');
+  step(straight, 0.1);
+  assert.ok(straight.animals[0].speed > diagonal.animals[0].speed * 1.9);
+});
+test('a free jump lands, cannot double jump, and movement stays in the visible clearing', () => {
+  const g = new Grove();
+  g.enter();
+  g.command('jump');
+  step(g, 0.1);
+  const a = g.animals[0],
+    vy = a.vy;
+  g.command('jump');
+  assert.equal(a.vy, vy);
+  assert.ok(a.y > 0.4);
+  step(g, 1);
+  assert.equal(a.y, 0);
+  g.command('forward');
+  g.command('left');
+  g.command('sprint');
+  step(g, 30);
+  assert.equal(a.x, GROVE_BOUNDS.left);
+  assert.equal(a.z, GROVE_BOUNDS.far);
+  assert.equal(a.speed, 0);
+});
+test('the other animals keep roaming while the selected one stands still; exit returns autonomy', () => {
+  const g = new Grove();
+  g.enter();
+  const before = g.animals.map((a) => [a.x, a.z]);
+  step(g, 1);
+  assert.deepEqual([g.animals[0].x, g.animals[0].z], before[0]);
+  assert.notDeepEqual([g.animals[1].x, g.animals[1].z], before[1]);
+  g.leave();
+  step(g, 1);
+  assert.notDeepEqual([g.animals[0].x, g.animals[0].z], before[0]);
+  assert.equal(g.keys.size, 0);
+});
+test('a ground feature travels towards +Z exactly as obstacles do in both renderers', () => {
+  for (const z of [-30, -5, 0, 3])
+    for (const travel of [0, 5, 100, 25000]) {
+      const d = 0.7;
+      assert.ok(Math.abs(groundCoordinate(z, travel) - groundCoordinate(z + d, travel + d)) < 1e-8);
+      const uv0 = (0.5 - z / 180) * 24 + groundOffset(travel),
+        uv1 = (0.5 - (z + d) / 180) * 24 + groundOffset(travel + d);
+      assert.ok(Math.abs(uv0 - uv1) < 1e-8);
+    }
+});

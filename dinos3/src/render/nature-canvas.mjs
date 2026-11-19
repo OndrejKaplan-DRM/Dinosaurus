@@ -1,0 +1,104 @@
+import { createNatureLayout, sampleProp, WILDLIFE, sampleAnimal, POND_OUTLINE } from '../game/nature-layout.mjs';
+import { fogRange } from './sky.mjs';
+async function picture(url) {
+  return new Promise((ok, no) => {
+    const i = new Image();
+    i.onload = () => ok(i);
+    i.onerror = no;
+    i.src = url;
+  });
+}
+export class NatureCanvas {
+  async load(asset) {
+    [this.manifest, this.meta, this.scenery, this.fauna] = await Promise.all([
+      fetch(asset('nature/manifest.json')).then((r) => r.json()),
+      fetch(asset('nature/atlas.json')).then((r) => r.json()),
+      picture(asset('nature/scenery.webp')),
+      picture(asset('nature/fauna.webp')),
+    ]);
+    this.layout = createNatureLayout(this.manifest);
+    return this;
+  }
+  sprite(view, id, x, y, z, scale = 1, yaw = 0, mode = 'idle', time = 0) {
+    const m = this.meta.models[id];
+    if (!m) return;
+    const spec = this.meta[m.atlas],
+      img = m.atlas === 'static' ? this.scenery : this.fauna,
+      p = view.project(x, y, z);
+    if (!p) return;
+    const size = m.extent * scale * p.k,
+      left = p.x - (size * m.anchor[0]) / spec.size,
+      top = p.y - (size * m.anchor[1]) / spec.size;
+    if (left + size < 0 || left > view.w || top > view.h) return;
+    let index = m.start;
+    if (m.frames > 1) {
+      const v = (Math.round(yaw / (Math.PI / 2)) + 4) % 4,
+        mi = mode === 'walk' ? 1 : 0,
+        indexInClip = Math.floor(((time / (m.durations[mi] || 1)) % 1) * m.frames);
+      index += mi * m.views * m.frames + v * m.frames + indexInClip;
+    }
+    const g = view.ctx,
+      [near, far] = fogRange(view.env);
+    g.save();
+    g.globalAlpha = 1 - Math.min(0.85, Math.max(0, (p.depth - near) / (far - near)) * 0.85);
+    g.drawImage(
+      img,
+      (index % spec.cols) * spec.size,
+      Math.floor(index / spec.cols) * spec.size,
+      spec.size,
+      spec.size,
+      left,
+      top,
+      size,
+      size,
+    );
+    g.restore();
+  }
+  jobs(view, s, jobs) {
+    if (s.environment?.options?.imported === false) return;
+    const menu = s.phase === 'menu';
+    for (const p of this.layout) {
+      const v = sampleProp(p, s);
+      if (!v.visible || v.z > 7) continue;
+      jobs.push({ z: v.z, draw: () => this.sprite(view, p.model, v.x, 0, v.z, v.scale) });
+    }
+    for (const [i, a] of WILDLIFE.entries()) {
+      const v = sampleAnimal(a, i, s);
+      if (!v.visible) continue;
+      jobs.push({
+        z: v.z,
+        draw: () => {
+          if (!a.model.startsWith('insect')) view.shadow(v.x, v.z, a.scale * (a.model.startsWith('dinosaur') ? 2 : 0.5), 0.15);
+          this.sprite(view, a.model, v.x, v.y, v.z, a.scale, v.yaw, v.mode, v.time);
+        },
+      });
+    }
+    if (menu || s.distance >= 900)
+      for (let i = 0; i < 5; i++) {
+        const z = 15 - 180 + ((((18 + i * 34 + (menu ? 0 : s.world)) % 180) + 180) % 180),
+          x = i % 2 ? 10 : -10;
+        jobs.push({
+          z: z - 7,
+          draw: () => {
+            const p = view.project(x, 0.03, z);
+            if (!p) return;
+            const g = view.ctx;
+            g.fillStyle = '#3d6c5db0';
+            g.beginPath();
+            for (const [j, [dx, dz]] of POND_OUTLINE.entries()) {
+              const q = view.project(x + dx, 0.035, z + dz);
+              if (q) j ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y);
+            }
+            g.closePath();
+            g.fill();
+            g.strokeStyle = '#728b5455';
+            g.lineWidth = 4;
+            g.stroke();
+          },
+        });
+      }
+  }
+  get stats() {
+    return { models: this.manifest.length, instances: this.layout.length, animals: WILDLIFE.length };
+  }
+}

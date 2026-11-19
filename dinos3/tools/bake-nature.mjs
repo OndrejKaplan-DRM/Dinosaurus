@@ -1,0 +1,154 @@
+import * as T from 'three';
+import { loadSource } from './nature-source.mjs';
+import { createCanvas } from '@napi-rs/canvas';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const input = new URL('../../asset_sources/selection.json', import.meta.url),
+  list = JSON.parse(await readFile(input)).map((a) => ({ ...a, source: fileURLToPath(new URL(a.source, input)) })),
+  texCache = new Map(),
+  light = new T.Vector3(-0.5, 0.9, 0.5).normalize();
+function pixels(tex) {
+  if (!tex?.image) return null;
+  if (texCache.has(tex.image)) return texCache.get(tex.image);
+  const im = tex.image,
+    c = createCanvas(im.width, im.height),
+    g = c.getContext('2d');
+  g.drawImage(im, 0, 0);
+  const p = { w: im.width, h: im.height, data: g.getImageData(0, 0, im.width, im.height).data };
+  texCache.set(im, p);
+  return p;
+}
+function render(root, size, extent, centerY, yaw = 0) {
+  root.rotation.y = yaw;
+  root.updateMatrixWorld(true);
+  const camera = new T.OrthographicCamera(-extent / 2, extent / 2, extent / 2, -extent / 2, 0.01, 1000);
+  camera.position.set(0, centerY + extent * 0.12, extent * 2);
+  camera.lookAt(0, centerY, 0);
+  camera.updateMatrixWorld();
+  const vp = new T.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse),
+    data = new Uint8ClampedArray(size * size * 4),
+    depth = new Float32Array(size * size).fill(Infinity),
+    v = new T.Vector3(),
+    normal = new T.Vector3();
+  root.traverseVisible((o) => {
+    if (!o.isMesh) return;
+    if (o.isSkinnedMesh) o.skeleton.update();
+    const geo = o.geometry,
+      p = geo.attributes.position,
+      uv = geo.attributes.uv,
+      idx = geo.index,
+      n = idx ? idx.count : p.count,
+      screen = [],
+      world = [];
+    for (let i = 0; i < p.count; i++) {
+      if (o.isSkinnedMesh) o.getVertexPosition(i, v);
+      else v.fromBufferAttribute(p, i);
+      v.applyMatrix4(o.matrixWorld);
+      world.push(v.clone());
+      v.applyMatrix4(vp);
+      screen.push([(v.x * 0.5 + 0.5) * size, (0.5 - v.y * 0.5) * size, v.z]);
+    }
+    for (let t = 0; t < n; t += 3) {
+      const ma = Array.isArray(o.material)
+        ? o.material[(geo.groups.find((g) => t >= g.start && t < g.start + g.count) || { materialIndex: 0 }).materialIndex]
+        : o.material;
+      if (!ma) continue;
+      const ids = [0, 1, 2].map((k) => (idx ? idx.getX(t + k) : t + k)),
+        [a, b, c] = ids.map((i) => screen[i]),
+        area = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+      if (Math.abs(area) < 0.003) continue;
+      const x0 = Math.max(0, Math.floor(Math.min(a[0], b[0], c[0]))),
+        x1 = Math.min(size - 1, Math.ceil(Math.max(a[0], b[0], c[0]))),
+        y0 = Math.max(0, Math.floor(Math.min(a[1], b[1], c[1]))),
+        y1 = Math.min(size - 1, Math.ceil(Math.max(a[1], b[1], c[1])));
+      normal.crossVectors(world[ids[1]].clone().sub(world[ids[0]]), world[ids[2]].clone().sub(world[ids[0]])).normalize();
+      const shade = 0.72 + Math.abs(normal.dot(light)) * 0.28,
+        col = ma.color.clone().convertLinearToSRGB(),
+        tex = pixels(ma.map),
+        uu = ids.map((i) => uv?.getX(i) || 0),
+        vv = ids.map((i) => uv?.getY(i) || 0);
+      for (let y = y0; y <= y1; y++)
+        for (let x = x0; x <= x1; x++) {
+          const l = ((b[0] - x) * (c[1] - y) - (b[1] - y) * (c[0] - x)) / area,
+            m = ((c[0] - x) * (a[1] - y) - (c[1] - y) * (a[0] - x)) / area,
+            q = 1 - l - m;
+          if (l < 0 || m < 0 || q < 0) continue;
+          const z = l * a[2] + m * b[2] + q * c[2],
+            k = y * size + x;
+          if (z >= depth[k]) continue;
+          let r = col.r * 255,
+            g = col.g * 255,
+            bv = col.b * 255,
+            alpha = 255;
+          if (tex) {
+            let u = l * uu[0] + m * uu[1] + q * uu[2],
+              v = l * vv[0] + m * vv[1] + q * vv[2];
+            u = ((u % 1) + 1) % 1;
+            v = ((v % 1) + 1) % 1;
+            if (ma.map.flipY) v = 1 - v;
+            const ti = (Math.min(tex.h - 1, Math.floor(v * tex.h)) * tex.w + Math.min(tex.w - 1, Math.floor(u * tex.w))) * 4;
+            r *= tex.data[ti] / 255;
+            g *= tex.data[ti + 1] / 255;
+            bv *= tex.data[ti + 2] / 255;
+            alpha = tex.data[ti + 3];
+          }
+          if (alpha < Math.max(16, (ma.alphaTest || 0) * 255)) continue;
+          depth[k] = z;
+          data[k * 4] = r * shade;
+          data[k * 4 + 1] = g * shade;
+          data[k * 4 + 2] = bv * shade;
+          data[k * 4 + 3] = alpha;
+        }
+    }
+  });
+  const c = createCanvas(size, size),
+    g = c.getContext('2d'),
+    im = g.createImageData(size, size);
+  im.data.set(data);
+  g.putImageData(im, 0, 0);
+  const origin = new T.Vector3().applyMatrix4(vp);
+  return { canvas: c, anchor: [(origin.x * 0.5 + 0.5) * size, (0.5 - origin.y * 0.5) * size] };
+}
+const still = list.filter((a) => !['dinosaur', 'smallanimal', 'insect'].includes(a.group)),
+  animated = list.filter((a) => !still.includes(a)),
+  atlas = createCanvas(8 * 320, Math.ceil(still.length / 8) * 320),
+  fauna = createCanvas(12 * 192, Math.ceil((animated.length * 48) / 12) * 192),
+  gc = atlas.getContext('2d'),
+  gf = fauna.getContext('2d'),
+  meta = { static: { size: 320, cols: 8 }, fauna: { size: 192, cols: 12 }, models: {} };
+for (const [i, a] of still.entries()) {
+  const { root, size } = await loadSource(a),
+    extent = Math.max(...size) * 1.12,
+    r = render(root, 320, extent, size[1] * 0.48, 0.2);
+  gc.drawImage(r.canvas, (i % 8) * 320, Math.floor(i / 8) * 320);
+  meta.models[a.id] = { atlas: 'static', start: i, frames: 1, views: 1, extent, anchor: r.anchor };
+  console.log('Baked scenery', i + 1, still.length, a.id);
+}
+let frame = 0;
+for (const a of animated) {
+  const { root, animationRoot, clips, size } = await loadSource(a),
+    extent = Math.max(...size) * 1.23,
+    centerY = size[1] * 0.48,
+    mixer = new T.AnimationMixer(animationRoot),
+    start = frame,
+    durations = [];
+  for (const mode of ['idle', 'walk']) {
+    const clip = clips.find((c) => c.name.toLowerCase().includes(mode)) || clips.find((c) => /flying/i.test(c.name)) || clips[0];
+    durations.push(clip.duration);
+    for (let view = 0; view < 4; view++)
+      for (let f = 0; f < 6; f++) {
+        mixer.stopAllAction();
+        mixer.clipAction(clip).reset().play();
+        mixer.setTime((clip.duration * f) / 6);
+        const r = render(root, 192, extent, centerY, (view * Math.PI) / 2);
+        gf.drawImage(r.canvas, (frame % 12) * 192, Math.floor(frame / 12) * 192);
+        meta.models[a.id] = { atlas: 'fauna', start, frames: 6, views: 4, extent, anchor: r.anchor, durations };
+        frame++;
+      }
+  }
+  console.log('Baked animal', a.id, frame);
+}
+await writeFile('public/nature/scenery.webp', atlas.toBuffer('image/webp', 91));
+await writeFile('public/nature/fauna.webp', fauna.toBuffer('image/webp', 91));
+await writeFile('public/nature/atlas.json', JSON.stringify(meta));
+console.log('Atlas complete', still.length, frame);

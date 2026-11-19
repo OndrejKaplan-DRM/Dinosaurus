@@ -1,0 +1,145 @@
+import { random } from './core.mjs';
+import { levelAt } from './progression.mjs';
+export const LEGACY_DETAILS = [
+  'turtle',
+  'croc',
+  'horsetail',
+  'cycad',
+  'mammal',
+  'lizard',
+  'amphibian',
+  'fish',
+  'shells',
+  'seeds',
+  'litter',
+  'deadwood',
+  'tracks',
+  'sandbar',
+];
+export function createNatureLayout(manifest) {
+  const groups = {};
+  for (const m of manifest) (groups[m.group] ??= []).push(m);
+  const rng = random(27043),
+    props = [];
+  const add = (group, count, min, max, scale = 1) => {
+    const pool = groups[group] || [];
+    for (let i = 0; i < count && pool.length; i++) {
+      const model = pool[i % pool.length],
+        side = i % 2 ? 1 : -1;
+      props.push({
+        id: props.length,
+        group,
+        model: model.id,
+        x: side * (min + rng() * (max - min)),
+        offset: rng() * 180,
+        span: 180,
+        near: 16,
+        yaw: rng() * Math.PI * 2,
+        scale: scale * (0.68 + rng() * 0.64),
+        phase: rng() * 6,
+      });
+    }
+  };
+  add('canopy', 44, 7.2, 22);
+  add('textured', 14, 8, 20);
+  add('conifer', 34, 7, 22);
+  add('palm', 26, 7, 22);
+  add('fern', 170, 4.3, 14);
+  add('understory', 74, 4.6, 17);
+  add('bush', 56, 6, 18);
+  add('rock', 16, 8, 23);
+  add('mossrock', 18, 5, 18);
+  add('wood', 18, 5, 17);
+  add('dead', 12, 7, 19);
+  add('flower', 36, 5, 17);
+  add('fungus', 16, 4.8, 10);
+  add('waterplant', 12, 8, 12);
+  for (const p of props) {
+    const m = manifest.find((m) => m.id === p.model);
+    if (['fern', 'understory', 'bush', 'rock', 'mossrock', 'wood', 'flower'].includes(p.group)) {
+      const radius = Math.max(m.size[0], m.size[2]) * 0.5 * p.scale;
+      p.x = Math.sign(p.x) * Math.max(Math.abs(p.x), 3.6 + radius);
+    }
+    const z = p.near - p.span + p.offset;
+    if (!['fern', 'flower', 'fungus', 'waterplant'].includes(p.group)) {
+      for (const a of WILDLIFE.filter((a) => a.model.startsWith('dinosaur'))) {
+        if (Math.abs(z - a.z) < 10 && Math.abs(p.x - a.x) < 5) p.x += Math.sign(p.x) * 6;
+      }
+    }
+  }
+  for (const p of props.filter((p) => p.group === 'waterplant')) {
+    const i = p.id % 5;
+    p.x = (i % 2 ? 10 : -10) + ((p.id % 3) - 1) * 1.1;
+    p.offset = 17 + i * 34 + (p.id % 2) * 1.3;
+  }
+  return props;
+}
+export const POND_OUTLINE = Array.from({ length: 36 }, (_, i) => {
+  const a = (i / 36) * Math.PI * 2,
+    r = 1 + 0.12 * Math.sin(a * 3 + 0.4) + 0.06 * Math.sin(a * 7);
+  return [Math.cos(a) * 4.2 * r, Math.sin(a) * 7 * r];
+});
+export function natureDensity(group, level) {
+  const trees = [
+    { canopy: 1, textured: 0.85, conifer: 0.12, palm: 0.45 },
+    { canopy: 0.55, textured: 0.35, conifer: 0.1, palm: 1 },
+    { canopy: 1, textured: 1, conifer: 0.2, palm: 0.2 },
+    { canopy: 0.25, textured: 0.3, conifer: 1, palm: 0.05 },
+    { canopy: 0.5, textured: 0.4, conifer: 0.1, palm: 0.85 },
+  ];
+  return trees[level]?.[group] ?? (group === 'flower' ? (level === 4 ? 1 : 0.35) : 1);
+}
+export function sampleProp(p, s) {
+  const menu = s.phase === 'menu',
+    world = menu ? 0 : s.world,
+    z = p.near - p.span + ((((p.offset + world) % p.span) + p.span) % p.span),
+    level = levelAt(menu ? 0 : Math.max(0, world - z)),
+    density = s.environment?.options?.density ?? 1;
+  return {
+    x: p.x,
+    z,
+    scale: p.scale,
+    visible:
+      (p.id * 0.61803398875) % 1 < Math.min(1, natureDensity(p.group, level) * density) &&
+      (p.group !== 'waterplant' || menu || s.distance >= 900),
+    level,
+  };
+}
+export const WILDLIFE = [
+  { model: 'dinosaur_triceratops', x: 7.1, z: -13, scale: 0.9 },
+  { model: 'dinosaur_triceratops', x: 10.4, z: -19, scale: 0.62 },
+  { model: 'dinosaur_parasaurolophus', x: -8.4, z: -34, scale: 0.92 },
+  { model: 'dinosaur_parasaurolophus', x: -11.8, z: -41, scale: 0.68 },
+  { model: 'dinosaur_trex', x: 16, z: -76, scale: 1.05 },
+  { model: 'dinosaur_triceratops', x: -8, z: -108, scale: 1 },
+  { model: 'dinosaur_parasaurolophus', x: 9, z: -140, scale: 1 },
+  { model: 'smallanimal_frog', x: -4.8, z: -15, scale: 1.4 },
+  { model: 'smallanimal_snake', x: 5.1, z: -38, scale: 0.8 },
+  { model: 'insect_wasp', x: 5.3, z: -11, scale: 1.6 },
+  { model: 'insect_wasp', x: -4.9, z: -24, scale: 1.4 },
+];
+export function sampleAnimal(a, i, s) {
+  const t = s.environment?.elapsed ?? s.time,
+    phase = (t + i * 7) % 40,
+    walking = phase < 10 || (phase >= 20 && phase < 30),
+    progress = phase < 10 ? phase / 10 : phase < 20 ? 1 : phase < 30 ? 1 - (phase - 20) / 10 : 0,
+    forward = phase < 20;
+  let x = a.x + (progress - 0.5) * 2.4,
+    z = a.z;
+  if (s.phase !== 'menu') z = 16 - 180 + ((((a.z + 164 + s.world) % 180) + 180) % 180);
+  const insect = a.model.startsWith('insect'),
+    small = a.model.startsWith('smallanimal');
+  if (insect) {
+    x += Math.sin(t * 1.1 + i) * 0.6;
+    z += Math.cos(t * 0.7 + i) * 0.5;
+  }
+  return {
+    x,
+    z,
+    y: insect ? 1.4 + Math.sin(t * 1.8 + i) * 0.35 : 0,
+    yaw: forward ? Math.PI / 2 : -Math.PI / 2,
+    mode: insect ? 'walk' : small ? 'idle' : walking ? 'walk' : 'idle',
+    time: t + i * 0.37,
+    visible: s.environment?.options?.fauna !== false && s.environment?.options?.wildlife !== false && z < 9,
+  };
+}

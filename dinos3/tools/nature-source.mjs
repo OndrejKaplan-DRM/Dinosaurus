@@ -1,0 +1,194 @@
+import * as T from 'three';
+import { readFile } from 'node:fs/promises';
+import { dirname, join, basename } from 'node:path';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+import { createCanvas, loadImage, Image, ImageData } from '@napi-rs/canvas';
+globalThis.ImageData = ImageData;
+globalThis.ProgressEvent = class {};
+globalThis.window = { URL: globalThis.URL };
+globalThis.HTMLImageElement = Image;
+globalThis.HTMLCanvasElement = createCanvas(1, 1).constructor;
+globalThis.document = {
+  createElement: () => {
+    const c = createCanvas(1, 1);
+    c.toBlob = (cb, type) => cb(new Blob([c.toBuffer(type || 'image/png')], { type: type || 'image/png' }));
+    return c;
+  },
+};
+globalThis.FileReader = class {
+  readAsArrayBuffer(b) {
+    b.arrayBuffer().then((x) => {
+      this.result = x;
+      this.onloadend?.();
+    });
+  }
+  readAsDataURL(b) {
+    b.arrayBuffer().then((x) => {
+      this.result = 'data:' + b.type + ';base64,' + Buffer.from(x).toString('base64');
+      this.onloadend?.();
+    });
+  }
+};
+export async function loadSource(a) {
+  let root,
+    clips = [];
+  if (a.source.endsWith('.gltf')) {
+    const j = JSON.parse(await readFile(a.source, 'utf8')),
+      images = j.images || [],
+      textures = j.textures || [],
+      mats = structuredClone(j.materials || []);
+    for (const b of j.buffers)
+      if (b.uri && !b.uri.startsWith('data:'))
+        b.uri = 'data:application/octet-stream;base64,' + (await readFile(join(dirname(a.source), b.uri))).toString('base64');
+    delete j.images;
+    delete j.textures;
+    for (const m of j.materials || []) {
+      for (const k of Object.keys(m)) if (/Texture$/.test(k)) delete m[k];
+      for (const k of Object.keys(m.pbrMetallicRoughness || {})) if (/Texture$/.test(k)) delete m.pbrMetallicRoughness[k];
+    }
+    const g = await new GLTFLoader().parseAsync(JSON.stringify(j), '');
+    root = g.scene;
+    const maps = new Map();
+    for (const m of mats) {
+      const ti = m.pbrMetallicRoughness?.baseColorTexture?.index;
+      if (ti === undefined) continue;
+      const uri = images[textures[ti].source].uri,
+        img = await loadImage(join(dirname(a.source), uri)),
+        tex = new T.Texture(img);
+      tex.flipY = false;
+      tex.colorSpace = T.SRGBColorSpace;
+      maps.set(m.name, tex);
+    }
+    root.traverse((o) => {
+      if (o.isMesh)
+        for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+          if (maps.has(m.name)) m.map = maps.get(m.name);
+          m.roughness = 0.88;
+          m.metalness = 0;
+        }
+    });
+  } else if (['dinosaur', 'smallanimal', 'insect'].includes(a.group)) {
+    const file = a.source.replace('/Blends/', '/FBX/').replace('.blend', '.fbx'),
+      b = await readFile(file);
+    root = new FBXLoader().parse(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength), '');
+    clips = root.animations;
+    const idle = clips.find((c) => /idle|flying/i.test(c.name)) || clips[0],
+      mixer = new T.AnimationMixer(root);
+    mixer.clipAction(idle).play();
+    mixer.update(0.01);
+    root.updateMatrixWorld(true);
+    root.traverse((o) => {
+      if (o.isSkinnedMesh) o.skeleton.update();
+    });
+  } else {
+    const file = a.source.replace('/Blends/', '/OBJ/').replace('.blend', '.obj'),
+      mtl = await readFile(file.replace('.obj', '.mtl'), 'utf8'),
+      materials = new MTLLoader().parse(mtl.replace(/^map_.*$/gm, ''), '');
+    materials.preload();
+    root = new OBJLoader().setMaterials(materials).parse(await readFile(file, 'utf8'));
+    const textureFiles = new Map();
+    let name = '';
+    for (const l of mtl.split('\n')) {
+      if (l.startsWith('newmtl ')) name = l.slice(7).trim();
+      if (l.startsWith('map_Kd ')) textureFiles.set(name, l.slice(7).trim().replaceAll('\\', '/'));
+    }
+    if (a.group === 'textured') {
+      textureFiles.set('Bark', 'Tree_Bark.jpg');
+      textureFiles.set('Tree_Leaves', 'Tree_Leaves.png');
+    }
+    for (const [name, uri] of textureFiles) {
+      const im = await loadImage(join(dirname(dirname(file)), 'Textures', basename(uri))),
+        tex = new T.Texture(im);
+      tex.colorSpace = T.SRGBColorSpace;
+      const m = materials.materials[name];
+      if (m) {
+        m.map = tex;
+        m.alphaTest = 0.4;
+        m.side = T.DoubleSide;
+      }
+    }
+  }
+  const palettes = {
+    dinosaur_triceratops: { Purple: '#74816b', LightBrown: '#d1be8b', Brown: '#59664f' },
+    dinosaur_trex: { Green: '#667b43', LightGreen: '#bab276', Black: '#151c12', Red: '#874c43', LightYellow: '#e3d5b2' },
+    dinosaur_parasaurolophus: { Green: '#4f9383', LightGreen: '#b8c78b', LightYellow: '#dccf9e', Red: '#bb764b' },
+  };
+  const seen = new Set();
+  root.traverse((o) => {
+    if (!o.isMesh) return;
+    for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+      if (seen.has(m)) continue;
+      seen.add(m);
+      if (palettes[a.id]?.[m.name]) m.color.set(palettes[a.id][m.name]);
+      else if (!m.map && !['smallanimal', 'insect'].includes(a.group)) {
+        const n = m.name.toLowerCase();
+        m.color.set(
+          a.group === 'understory'
+            ? '#608747'
+            : /wood|bark|brown/.test(n)
+              ? '#806449'
+              : /green|moss/.test(n)
+                ? /dark/.test(n)
+                  ? '#355c31'
+                  : '#639043'
+                : /rock|grey|gray/.test(n)
+                  ? '#818773'
+                  : /red/.test(n)
+                    ? '#bb684c'
+                    : m.color,
+        );
+      }
+      if (m.map && /twistedtree|bush_common$|plant_7|bush_usn/.test(a.id)) {
+        const im = m.map.image,
+          c = createCanvas(im.width, im.height),
+          g = c.getContext('2d');
+        g.drawImage(im, 0, 0);
+        const d = g.getImageData(0, 0, c.width, c.height);
+        for (let i = 0; i < d.data.length; i += 4) {
+          const r = d.data[i],
+            gg = d.data[i + 1],
+            b = d.data[i + 2];
+          if (r > gg * 1.25 || b > gg * 1.35 || a.id.startsWith('bush_usn')) {
+            const lum = Math.max(r, gg, b);
+            d.data[i] = lum * 0.48;
+            d.data[i + 1] = lum * 0.68;
+            d.data[i + 2] = lum * 0.34;
+          }
+        }
+        g.putImageData(d, 0, 0);
+        m.map.image = c;
+      }
+    }
+  });
+  root.updateMatrixWorld(true);
+  root.traverse((o) => {
+    if (o.isSkinnedMesh) {
+      o.skeleton.update();
+      o.computeBoundingBox();
+    }
+  });
+  let box = new T.Box3().setFromObject(root),
+    height = box.max.y - box.min.y;
+  if (height <= 0) height = 1;
+  const scale = a.height / height,
+    center = box.getCenter(new T.Vector3()),
+    normalized = new T.Group(),
+    wrapper = new T.Group();
+  normalized.name = a.id;
+  wrapper.scale.setScalar(scale);
+  wrapper.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
+  wrapper.add(root);
+  normalized.add(wrapper);
+  normalized.updateMatrixWorld(true);
+  root.traverse((o) => {
+    if (o.isMesh) {
+      o.castShadow = true;
+      o.receiveShadow = true;
+    }
+  });
+  box = new T.Box3().setFromObject(normalized);
+  return { root: normalized, animationRoot: root, clips, size: box.getSize(new T.Vector3()).toArray() };
+}
