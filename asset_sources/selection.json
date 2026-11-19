@@ -1,0 +1,346 @@
+[
+  {
+    "id": "canopy_commontree_1",
+    "name": "CommonTree_1",
+    "source": "glTF/CommonTree_1.gltf",
+    "group": "canopy",
+    "height": 10,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "canopy_commontree_3",
+    "name": "CommonTree_3",
+    "source": "glTF/CommonTree_3.gltf",
+    "group": "canopy",
+    "height": 10,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "canopy_commontree_5",
+    "name": "CommonTree_5",
+    "source": "glTF/CommonTree_5.gltf",
+    "group": "canopy",
+    "height": 10,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "canopy_twistedtree_1",
+    "name": "TwistedTree_1",
+    "source": "glTF/TwistedTree_1.gltf",
+    "group": "canopy",
+    "height": 10,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "canopy_twistedtree_3",
+    "name": "TwistedTree_3",
+    "source": "glTF/TwistedTree_3.gltf",
+    "group": "canopy",
+    "height": 10,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "conifer_pine_1",
+    "name": "Pine_1",
+    "source": "glTF/Pine_1.gltf",
+    "group": "conifer",
+    "height": 12,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "conifer_pine_3",
+    "name": "Pine_3",
+    "source": "glTF/Pine_3.gltf",
+    "group": "conifer",
+    "height": 12,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "conifer_pine_5",
+    "name": "Pine_5",
+    "source": "glTF/Pine_5.gltf",
+    "group": "conifer",
+    "height": 12,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "fern_fern_1",
+    "name": "Fern_1",
+    "source": "glTF/Fern_1.gltf",
+    "group": "fern",
+    "height": 1.3,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "understory_plant_1",
+    "name": "Plant_1",
+    "source": "glTF/Plant_1.gltf",
+    "group": "understory",
+    "height": 1.6,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "understory_plant_7",
+    "name": "Plant_7",
+    "source": "glTF/Plant_7.gltf",
+    "group": "understory",
+    "height": 1.6,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "understory_plant_7_big",
+    "name": "Plant_7_Big",
+    "source": "glTF/Plant_7_Big.gltf",
+    "group": "understory",
+    "height": 1.6,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "bush_bush_common",
+    "name": "Bush_Common",
+    "source": "glTF/Bush_Common.gltf",
+    "group": "bush",
+    "height": 2,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "bush_bush_common_flowers",
+    "name": "Bush_Common_Flowers",
+    "source": "glTF/Bush_Common_Flowers.gltf",
+    "group": "bush",
+    "height": 2,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "rock_rock_medium_1",
+    "name": "Rock_Medium_1",
+    "source": "glTF/Rock_Medium_1.gltf",
+    "group": "rock",
+    "height": 2,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "rock_rock_medium_2",
+    "name": "Rock_Medium_2",
+    "source": "glTF/Rock_Medium_2.gltf",
+    "group": "rock",
+    "height": 2,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "rock_rock_medium_3",
+    "name": "Rock_Medium_3",
+    "source": "glTF/Rock_Medium_3.gltf",
+    "group": "rock",
+    "height": 2,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "dead_deadtree_1",
+    "name": "DeadTree_1",
+    "source": "glTF/DeadTree_1.gltf",
+    "group": "dead",
+    "height": 6,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "dead_deadtree_3",
+    "name": "DeadTree_3",
+    "source": "glTF/DeadTree_3.gltf",
+    "group": "dead",
+    "height": 6,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "flower_flower_3_group",
+    "name": "Flower_3_Group",
+    "source": "glTF/Flower_3_Group.gltf",
+    "group": "flower",
+    "height": 0.5,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "flower_flower_4_group",
+    "name": "Flower_4_Group",
+    "source": "glTF/Flower_4_Group.gltf",
+    "group": "flower",
+    "height": 0.5,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "fungus_mushroom_common",
+    "name": "Mushroom_Common",
+    "source": "glTF/Mushroom_Common.gltf",
+    "group": "fungus",
+    "height": 0.35,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "fungus_mushroom_laetiporus",
+    "name": "Mushroom_Laetiporus",
+    "source": "glTF/Mushroom_Laetiporus.gltf",
+    "group": "fungus",
+    "height": 0.35,
+    "pack": "Stylized Nature MegaKit[Standard]"
+  },
+  {
+    "id": "palm_palmtree_1",
+    "name": "PalmTree_1",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/PalmTree_1.blend",
+    "group": "palm",
+    "height": 9,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "palm_palmtree_3",
+    "name": "PalmTree_3",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/PalmTree_3.blend",
+    "group": "palm",
+    "height": 9,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "wood_woodlog_moss",
+    "name": "WoodLog_Moss",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/WoodLog_Moss.blend",
+    "group": "wood",
+    "height": 0.8,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "wood_treestump_moss",
+    "name": "TreeStump_Moss",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/TreeStump_Moss.blend",
+    "group": "wood",
+    "height": 0.8,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "mossrock_rock_moss_2",
+    "name": "Rock_Moss_2",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/Rock_Moss_2.blend",
+    "group": "mossrock",
+    "height": 1.6,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "mossrock_rock_moss_4",
+    "name": "Rock_Moss_4",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/Rock_Moss_4.blend",
+    "group": "mossrock",
+    "height": 1.6,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "waterplant_lilypad",
+    "name": "Lilypad",
+    "source": "Ultimate Nature Pack - Jun 2019/Blends/Lilypad.blend",
+    "group": "waterplant",
+    "height": 0.1,
+    "pack": "Ultimate Nature Pack - Jun 2019"
+  },
+  {
+    "id": "textured_tree_2",
+    "name": "Tree_2",
+    "source": "Textured Stylized Trees - May 2020/Blends/Tree_2.blend",
+    "group": "textured",
+    "height": 10,
+    "pack": "Textured Stylized Trees - May 2020"
+  },
+  {
+    "id": "textured_tree_7",
+    "name": "Tree_7",
+    "source": "Textured Stylized Trees - May 2020/Blends/Tree_7.blend",
+    "group": "textured",
+    "height": 10,
+    "pack": "Textured Stylized Trees - May 2020"
+  },
+  {
+    "id": "fungus_mushroom_2",
+    "name": "Mushroom_2",
+    "source": "Nature Crops Pack - Jan 2020/Blends/Mushroom_2.blend",
+    "group": "fungus",
+    "height": 0.4,
+    "pack": "Nature Crops Pack - Jan 2020"
+  },
+  {
+    "id": "dinosaur_triceratops",
+    "name": "Triceratops",
+    "source": "Dinosaur Animated Pack - Dec 2018/Blends/Triceratops.blend",
+    "group": "dinosaur",
+    "height": 2.6,
+    "pack": "Dinosaur Animated Pack - Dec 2018"
+  },
+  {
+    "id": "dinosaur_trex",
+    "name": "Trex",
+    "source": "Dinosaur Animated Pack - Dec 2018/Blends/Trex.blend",
+    "group": "dinosaur",
+    "height": 4,
+    "pack": "Dinosaur Animated Pack - Dec 2018"
+  },
+  {
+    "id": "dinosaur_parasaurolophus",
+    "name": "Parasaurolophus",
+    "source": "Dinosaur Animated Pack - Dec 2018/Blends/Parasaurolophus.blend",
+    "group": "dinosaur",
+    "height": 3.6,
+    "pack": "Dinosaur Animated Pack - Dec 2018"
+  },
+  {
+    "id": "smallanimal_frog",
+    "name": "Frog",
+    "source": "Easy Animated Enemy Pack - Jan 2019/Blends/Frog.blend",
+    "group": "smallanimal",
+    "height": 0.23,
+    "pack": "Easy Animated Enemy Pack - Jan 2019"
+  },
+  {
+    "id": "smallanimal_snake",
+    "name": "Snake",
+    "source": "Easy Animated Enemy Pack - Jan 2019/Blends/Snake.blend",
+    "group": "smallanimal",
+    "height": 0.65,
+    "pack": "Easy Animated Enemy Pack - Jan 2019"
+  },
+  {
+    "id": "insect_wasp",
+    "name": "Wasp",
+    "source": "Easy Animated Enemy Pack - Jan 2019/Blends/Wasp.blend",
+    "group": "insect",
+    "height": 0.12,
+    "pack": "Easy Animated Enemy Pack - Jan 2019"
+  },
+  {
+    "id": "bush_usn_bush_large",
+    "name": "Bush_Large",
+    "source": "Ultimate Stylized Nature - May 2022/glTF/Bush_Large.gltf",
+    "group": "bush",
+    "height": 2.8,
+    "pack": "Ultimate Stylized Nature - May 2022"
+  },
+  {
+    "id": "flower_usn_flower_1_clump",
+    "name": "Flower_1_Clump",
+    "source": "Ultimate Stylized Nature - May 2022/glTF/Flower_1_Clump.gltf",
+    "group": "flower",
+    "height": 0.55,
+    "pack": "Ultimate Stylized Nature - May 2022"
+  },
+  {
+    "id": "dead_usn_deadtree_5",
+    "name": "DeadTree_5",
+    "source": "Ultimate Stylized Nature - May 2022/glTF/DeadTree_5.gltf",
+    "group": "dead",
+    "height": 6,
+    "pack": "Ultimate Stylized Nature - May 2022"
+  },
+  {
+    "id": "understory_usn_plant_1",
+    "name": "Plant_1",
+    "source": "Ultimate Stylized Nature - May 2022/Blends/Plant_1.blend",
+    "group": "understory",
+    "height": 1.4,
+    "pack": "Ultimate Stylized Nature - May 2022"
+  }
+]
