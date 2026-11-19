@@ -1,0 +1,27 @@
+{
+  "size": 320,
+  "cols": 10,
+  "count": 88,
+  "anchor": [
+    160,
+    222.75716324421893
+  ],
+  "worldSize": 4,
+  "run": {
+    "start": 0,
+    "frames": 8,
+    "views": 8
+  },
+  "duck": {
+    "start": 64,
+    "frames": 6
+  },
+  "jump": {
+    "start": 70,
+    "frames": 8
+  },
+  "stumble": {
+    "start": 78,
+    "frames": 10
+  }
+}

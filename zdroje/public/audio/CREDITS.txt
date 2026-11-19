@@ -1,0 +1,6 @@
+Zvuky: Kenney (www.kenney.nl) — Impact Sounds, Interface Sounds, RPG Audio, Music Jingles.
+Licence: CC0 1.0 Universal. https://creativecommons.org/publicdomain/zero/1.0/
+grove.ogg — Jungle2 by Alex McCulloch (Pro Sensory), CC0, https://opengameart.org/content/jungle-0
+insects.ogg — Insect Sounds by fvcalderan, CC0, https://opengameart.org/content/insect-sounds
+
+Poznámka Dinoš 2: grove.ogg / Jungle2 se v této verzi nepoužívá.
