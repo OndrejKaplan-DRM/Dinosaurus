@@ -1,670 +1,670 @@
 [
-  {
-    "id": "canopy_commontree_1",
-    "name": "CommonTree_1",
-    "group": "canopy",
-    "height": 10,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      5.934687270103308,
-      10,
-      6.3012378757521965
-    ],
-    "clips": [],
-    "bytes": 843836
-  },
-  {
-    "id": "canopy_commontree_3",
-    "name": "CommonTree_3",
-    "group": "canopy",
-    "height": 10,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      4.310625286513519,
-      10,
-      4.499725734041155
-    ],
-    "clips": [],
-    "bytes": 649236
-  },
-  {
-    "id": "canopy_commontree_5",
-    "name": "CommonTree_5",
-    "group": "canopy",
-    "height": 10,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      5.239851119907717,
-      10,
-      6.022702832902187
-    ],
-    "clips": [],
-    "bytes": 605244
-  },
-  {
-    "id": "canopy_twistedtree_1",
-    "name": "TwistedTree_1",
-    "group": "canopy",
-    "height": 10,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      8.080929154446153,
-      10.000000000000002,
-      6.905244946864018
-    ],
-    "clips": [],
-    "bytes": 738824
-  },
-  {
-    "id": "canopy_twistedtree_3",
-    "name": "TwistedTree_3",
-    "group": "canopy",
-    "height": 10,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      7.066397244713725,
-      10,
-      7.158556453632132
-    ],
-    "clips": [],
-    "bytes": 777544
-  },
-  {
-    "id": "conifer_pine_1",
-    "name": "Pine_1",
-    "group": "conifer",
-    "height": 12,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      8.109477213993548,
-      12,
-      7.4431395441752946
-    ],
-    "clips": [],
-    "bytes": 579044
-  },
-  {
-    "id": "conifer_pine_3",
-    "name": "Pine_3",
-    "group": "conifer",
-    "height": 12,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      5.862495964251398,
-      11.999999999999998,
-      6.486519685004133
-    ],
-    "clips": [],
-    "bytes": 648828
-  },
-  {
-    "id": "conifer_pine_5",
-    "name": "Pine_5",
-    "group": "conifer",
-    "height": 12,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      8.831199909946083,
-      12,
-      8.558649980227514
-    ],
-    "clips": [],
-    "bytes": 424524
-  },
-  {
-    "id": "fern_fern_1",
-    "name": "Fern_1",
-    "group": "fern",
-    "height": 1.3,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      4.373750050757626,
-      1.3,
-      4.103592501581142
-    ],
-    "clips": [],
-    "bytes": 224832
-  },
-  {
-    "id": "understory_plant_1",
-    "name": "Plant_1",
-    "group": "understory",
-    "height": 1.6,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.010147525106057,
-      1.6,
-      2.1879530883632397
-    ],
-    "clips": [],
-    "bytes": 218904
-  },
-  {
-    "id": "understory_plant_7",
-    "name": "Plant_7",
-    "group": "understory",
-    "height": 1.6,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      6.719187915139961,
-      1.5999999999999999,
-      6.169548609365115
-    ],
-    "clips": [],
-    "bytes": 5136
-  },
-  {
-    "id": "understory_plant_7_big",
-    "name": "Plant_7_Big",
-    "group": "understory",
-    "height": 1.6,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      8.275622341239156,
-      1.6,
-      8.599836361107544
-    ],
-    "clips": [],
-    "bytes": 7840
-  },
-  {
-    "id": "bush_bush_common",
-    "name": "Bush_Common",
-    "group": "bush",
-    "height": 2,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.42111784799131,
-      2,
-      2.4847119605718744
-    ],
-    "clips": [],
-    "bytes": 95260
-  },
-  {
-    "id": "bush_bush_common_flowers",
-    "name": "Bush_Common_Flowers",
-    "group": "bush",
-    "height": 2,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.42111784799131,
-      2,
-      2.4847119605718744
-    ],
-    "clips": [],
-    "bytes": 361588
-  },
-  {
-    "id": "rock_rock_medium_1",
-    "name": "Rock_Medium_1",
-    "group": "rock",
-    "height": 2,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.854370607305998,
-      2,
-      2.64549164345459
-    ],
-    "clips": [],
-    "bytes": 364624
-  },
-  {
-    "id": "rock_rock_medium_2",
-    "name": "Rock_Medium_2",
-    "group": "rock",
-    "height": 2,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      3.2109538588217212,
-      2,
-      2.6109577316838912
-    ],
-    "clips": [],
-    "bytes": 360752
-  },
-  {
-    "id": "rock_rock_medium_3",
-    "name": "Rock_Medium_3",
-    "group": "rock",
-    "height": 2,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.9530806186068164,
-      2,
-      3.0014558767993673
-    ],
-    "clips": [],
-    "bytes": 371460
-  },
-  {
-    "id": "dead_deadtree_1",
-    "name": "DeadTree_1",
-    "group": "dead",
-    "height": 6,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      3.8853883195280137,
-      6,
-      3.6324670164033277
-    ],
-    "clips": [],
-    "bytes": 727580
-  },
-  {
-    "id": "dead_deadtree_3",
-    "name": "DeadTree_3",
-    "group": "dead",
-    "height": 6,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      2.8858682099848023,
-      6,
-      2.905062897770912
-    ],
-    "clips": [],
-    "bytes": 720576
-  },
-  {
-    "id": "flower_flower_3_group",
-    "name": "Flower_3_Group",
-    "group": "flower",
-    "height": 0.5,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      0.36218881308778217,
-      0.5,
-      0.3871665992392423
-    ],
-    "clips": [],
-    "bytes": 410724
-  },
-  {
-    "id": "flower_flower_4_group",
-    "name": "Flower_4_Group",
-    "group": "flower",
-    "height": 0.5,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      0.3579999249419644,
-      0.5,
-      0.2749610258184003
-    ],
-    "clips": [],
-    "bytes": 445188
-  },
-  {
-    "id": "fungus_mushroom_common",
-    "name": "Mushroom_Common",
-    "group": "fungus",
-    "height": 0.35,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      0.4256818015886624,
-      0.35,
-      0.5883512079217642
-    ],
-    "clips": [],
-    "bytes": 390512
-  },
-  {
-    "id": "fungus_mushroom_laetiporus",
-    "name": "Mushroom_Laetiporus",
-    "group": "fungus",
-    "height": 0.35,
-    "pack": "Stylized Nature MegaKit[Standard]",
-    "size": [
-      0.6233864536460693,
-      0.35000000000000003,
-      0.5034352850925774
-    ],
-    "clips": [],
-    "bytes": 444580
-  },
-  {
-    "id": "palm_palmtree_1",
-    "name": "PalmTree_1",
-    "group": "palm",
-    "height": 9,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      5.7906263455996925,
-      9,
-      5.251360774830962
-    ],
-    "clips": [],
-    "bytes": 140428
-  },
-  {
-    "id": "palm_palmtree_3",
-    "name": "PalmTree_3",
-    "group": "palm",
-    "height": 9,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      6.590810481485473,
-      9.000000000000002,
-      5.759517657915895
-    ],
-    "clips": [],
-    "bytes": 119336
-  },
-  {
-    "id": "wood_woodlog_moss",
-    "name": "WoodLog_Moss",
-    "group": "wood",
-    "height": 0.8,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      1.0421107220301717,
-      0.8000000000000002,
-      3.1035370227828345
-    ],
-    "clips": [],
-    "bytes": 50972
-  },
-  {
-    "id": "wood_treestump_moss",
-    "name": "TreeStump_Moss",
-    "group": "wood",
-    "height": 0.8,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      1.749816777690115,
-      0.8,
-      1.3274434609535097
-    ],
-    "clips": [],
-    "bytes": 19936
-  },
-  {
-    "id": "mossrock_rock_moss_2",
-    "name": "Rock_Moss_2",
-    "group": "mossrock",
-    "height": 1.6,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      1.4167969676942946,
-      1.5999999999999999,
-      1.5044144036244291
-    ],
-    "clips": [],
-    "bytes": 7920
-  },
-  {
-    "id": "mossrock_rock_moss_4",
-    "name": "Rock_Moss_4",
-    "group": "mossrock",
-    "height": 1.6,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      1.5181927592902151,
-      1.6000000000000003,
-      2.553255810893338
-    ],
-    "clips": [],
-    "bytes": 11800
-  },
-  {
-    "id": "waterplant_lilypad",
-    "name": "Lilypad",
-    "group": "waterplant",
-    "height": 0.1,
-    "pack": "Ultimate Nature Pack - Jun 2019",
-    "size": [
-      0.5420512068854719,
-      0.1,
-      0.5383955432262292
-    ],
-    "clips": [],
-    "bytes": 30820
-  },
-  {
-    "id": "textured_tree_2",
-    "name": "Tree_2",
-    "group": "textured",
-    "height": 10,
-    "pack": "Textured Stylized Trees - May 2020",
-    "size": [
-      10.844013756706502,
-      10,
-      10.80222587714561
-    ],
-    "clips": [],
-    "bytes": 582404
-  },
-  {
-    "id": "textured_tree_7",
-    "name": "Tree_7",
-    "group": "textured",
-    "height": 10,
-    "pack": "Textured Stylized Trees - May 2020",
-    "size": [
-      9.464403415568672,
-      10,
-      7.629264039981412
-    ],
-    "clips": [],
-    "bytes": 574644
-  },
-  {
-    "id": "fungus_mushroom_2",
-    "name": "Mushroom_2",
-    "group": "fungus",
-    "height": 0.4,
-    "pack": "Nature Crops Pack - Jan 2020",
-    "size": [
-      0.2530499745535402,
-      0.4,
-      0.2530499745535402
-    ],
-    "clips": [],
-    "bytes": 49000
-  },
-  {
-    "id": "dinosaur_triceratops",
-    "name": "Triceratops",
-    "group": "dinosaur",
-    "height": 2.6,
-    "pack": "Dinosaur Animated Pack - Dec 2018",
-    "size": [
-      0.8278492537649103,
-      2.5999999999999996,
-      3.1957576117580704
-    ],
-    "clips": [
-      {
-        "name": "Armature|Triceratops_Walk",
-        "duration": 2.9166667461395264
-      },
-      {
-        "name": "Armature|Triceratops_Idle",
-        "duration": 2.5416667461395264
-      },
-      {
-        "name": "Armature|Triceratops_Jump",
-        "duration": 1.6666666269302368
-      }
-    ],
-    "bytes": 444836
-  },
-  {
-    "id": "dinosaur_trex",
-    "name": "Trex",
-    "group": "dinosaur",
-    "height": 4,
-    "pack": "Dinosaur Animated Pack - Dec 2018",
-    "size": [
-      2.1132521830415483,
-      3.9999999999999996,
-      7.996346344724609
-    ],
-    "clips": [
-      {
-        "name": "Armature|TRex_Jump",
-        "duration": 1.4583333730697632
-      },
-      {
-        "name": "Armature|TRex_Idle",
-        "duration": 2.5
-      },
-      {
-        "name": "Armature|TRex_Walk",
-        "duration": 1.375
-      }
-    ],
-    "bytes": 514384
-  },
-  {
-    "id": "dinosaur_parasaurolophus",
-    "name": "Parasaurolophus",
-    "group": "dinosaur",
-    "height": 3.6,
-    "pack": "Dinosaur Animated Pack - Dec 2018",
-    "size": [
-      1.226219095625329,
-      3.6,
-      7.383203797435663
-    ],
-    "clips": [
-      {
-        "name": "Armature|Parasaurolophus_Walk",
-        "duration": 1.1666666269302368
-      },
-      {
-        "name": "Armature|Parasaurolophus_Jump",
-        "duration": 1.3333333730697632
-      },
-      {
-        "name": "Armature|Parasaurolophus_Idle",
-        "duration": 2.5
-      }
-    ],
-    "bytes": 461868
-  },
-  {
-    "id": "smallanimal_frog",
-    "name": "Frog",
-    "group": "smallanimal",
-    "height": 0.23,
-    "pack": "Easy Animated Enemy Pack - Jan 2019",
-    "size": [
-      0.5471599128494395,
-      0.22999999999999998,
-      0.5020634262909555
-    ],
-    "clips": [
-      {
-        "name": "FrogArmature|Frog_Jump",
-        "duration": 0.875
-      },
-      {
-        "name": "FrogArmature|Frog_Idle",
-        "duration": 2.5
-      }
-    ],
-    "bytes": 895232
-  },
-  {
-    "id": "smallanimal_snake",
-    "name": "Snake",
-    "group": "smallanimal",
-    "height": 0.65,
-    "pack": "Easy Animated Enemy Pack - Jan 2019",
-    "size": [
-      0.22374460277032054,
-      0.65,
-      0.6219232396601834
-    ],
-    "clips": [
-      {
-        "name": "SnakeArmature|Snake_Walk",
-        "duration": 0.8333333134651184
-      },
-      {
-        "name": "SnakeArmature|Snake_Idle",
-        "duration": 2.0833332538604736
-      },
-      {
-        "name": "SnakeArmature|Snake_Jump",
-        "duration": 0.9583333134651184
-      }
-    ],
-    "bytes": 364252
-  },
-  {
-    "id": "insect_wasp",
-    "name": "Wasp",
-    "group": "insect",
-    "height": 0.12,
-    "pack": "Easy Animated Enemy Pack - Jan 2019",
-    "size": [
-      0.16032481273726557,
-      0.12000000000000001,
-      0.08418210470027779
-    ],
-    "clips": [
-      {
-        "name": "WaspArmature|Wasp_Flying",
-        "duration": 1.5
-      }
-    ],
-    "bytes": 716320
-  },
-  {
-    "id": "bush_usn_bush_large",
-    "name": "Bush_Large",
-    "group": "bush",
-    "height": 2.8,
-    "pack": "Ultimate Stylized Nature - May 2022",
-    "size": [
-      3.0282792273181354,
-      2.8,
-      2.8006117393901278
-    ],
-    "clips": [],
-    "bytes": 22644
-  },
-  {
-    "id": "flower_usn_flower_1_clump",
-    "name": "Flower_1_Clump",
-    "group": "flower",
-    "height": 0.55,
-    "pack": "Ultimate Stylized Nature - May 2022",
-    "size": [
-      0.38597936844835024,
-      0.55,
-      0.35653801918633776
-    ],
-    "clips": [],
-    "bytes": 141256
-  },
-  {
-    "id": "dead_usn_deadtree_5",
-    "name": "DeadTree_5",
-    "group": "dead",
-    "height": 6,
-    "pack": "Ultimate Stylized Nature - May 2022",
-    "size": [
-      3.320026716471382,
-      6,
-      3.5343014166939106
-    ],
-    "clips": [],
-    "bytes": 260612
-  },
-  {
-    "id": "understory_usn_plant_1",
-    "name": "Plant_1",
-    "group": "understory",
-    "height": 1.4,
-    "pack": "Ultimate Stylized Nature - May 2022",
-    "size": [
-      2.5333289379538324,
-      1.4,
-      2.4496482089393155
-    ],
-    "clips": [],
-    "bytes": 41892
-  }
+ {
+  "id": "canopy_commontree_1",
+  "name": "CommonTree_1",
+  "group": "canopy",
+  "height": 10,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   5.934687270103308,
+   10,
+   6.3012378757521965
+  ],
+  "clips": [],
+  "bytes": 173144
+ },
+ {
+  "id": "canopy_commontree_3",
+  "name": "CommonTree_3",
+  "group": "canopy",
+  "height": 10,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   4.310625286513519,
+   10,
+   4.499725734041155
+  ],
+  "clips": [],
+  "bytes": 123428
+ },
+ {
+  "id": "canopy_commontree_5",
+  "name": "CommonTree_5",
+  "group": "canopy",
+  "height": 10,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   5.239851119907717,
+   10,
+   6.022702832902187
+  ],
+  "clips": [],
+  "bytes": 122372
+ },
+ {
+  "id": "canopy_twistedtree_1",
+  "name": "TwistedTree_1",
+  "group": "canopy",
+  "height": 10,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   8.080929154446153,
+   10.000000000000002,
+   6.905244946864018
+  ],
+  "clips": [],
+  "bytes": 192572
+ },
+ {
+  "id": "canopy_twistedtree_3",
+  "name": "TwistedTree_3",
+  "group": "canopy",
+  "height": 10,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   7.066397244713725,
+   10,
+   7.158556453632132
+  ],
+  "clips": [],
+  "bytes": 200576
+ },
+ {
+  "id": "conifer_pine_1",
+  "name": "Pine_1",
+  "group": "conifer",
+  "height": 12,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   8.109477213993548,
+   12,
+   7.4431395441752946
+  ],
+  "clips": [],
+  "bytes": 96440
+ },
+ {
+  "id": "conifer_pine_3",
+  "name": "Pine_3",
+  "group": "conifer",
+  "height": 12,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   5.862495964251398,
+   11.999999999999998,
+   6.486519685004133
+  ],
+  "clips": [],
+  "bytes": 114756
+ },
+ {
+  "id": "conifer_pine_5",
+  "name": "Pine_5",
+  "group": "conifer",
+  "height": 12,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   8.831199909946083,
+   12,
+   8.558649980227514
+  ],
+  "clips": [],
+  "bytes": 55580
+ },
+ {
+  "id": "fern_fern_1",
+  "name": "Fern_1",
+  "group": "fern",
+  "height": 1.3,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   4.373750050757626,
+   1.3,
+   4.103592501581142
+  ],
+  "clips": [],
+  "bytes": 39684
+ },
+ {
+  "id": "understory_plant_1",
+  "name": "Plant_1",
+  "group": "understory",
+  "height": 1.6,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.010147525106057,
+   1.6,
+   2.1879530883632397
+  ],
+  "clips": [],
+  "bytes": 37604
+ },
+ {
+  "id": "understory_plant_7",
+  "name": "Plant_7",
+  "group": "understory",
+  "height": 1.6,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   6.719187915139961,
+   1.5999999999999999,
+   6.169548609365115
+  ],
+  "clips": [],
+  "bytes": 3356
+ },
+ {
+  "id": "understory_plant_7_big",
+  "name": "Plant_7_Big",
+  "group": "understory",
+  "height": 1.6,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   8.275622341239156,
+   1.6,
+   8.599836361107544
+  ],
+  "clips": [],
+  "bytes": 4284
+ },
+ {
+  "id": "bush_bush_common",
+  "name": "Bush_Common",
+  "group": "bush",
+  "height": 2,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.42111784799131,
+   2,
+   2.4847119605718744
+  ],
+  "clips": [],
+  "bytes": 24260
+ },
+ {
+  "id": "bush_bush_common_flowers",
+  "name": "Bush_Common_Flowers",
+  "group": "bush",
+  "height": 2,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.42111784799131,
+   2,
+   2.4847119605718744
+  ],
+  "clips": [],
+  "bytes": 96700
+ },
+ {
+  "id": "rock_rock_medium_1",
+  "name": "Rock_Medium_1",
+  "group": "rock",
+  "height": 2,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.854370607305998,
+   2,
+   2.64549164345459
+  ],
+  "clips": [],
+  "bytes": 29984
+ },
+ {
+  "id": "rock_rock_medium_2",
+  "name": "Rock_Medium_2",
+  "group": "rock",
+  "height": 2,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   3.2109538588217212,
+   2,
+   2.6109577316838912
+  ],
+  "clips": [],
+  "bytes": 28796
+ },
+ {
+  "id": "rock_rock_medium_3",
+  "name": "Rock_Medium_3",
+  "group": "rock",
+  "height": 2,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.9530806186068164,
+   2,
+   3.0014558767993673
+  ],
+  "clips": [],
+  "bytes": 32224
+ },
+ {
+  "id": "dead_deadtree_1",
+  "name": "DeadTree_1",
+  "group": "dead",
+  "height": 6,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   3.8853883195280137,
+   6,
+   3.6324670164033277
+  ],
+  "clips": [],
+  "bytes": 131528
+ },
+ {
+  "id": "dead_deadtree_3",
+  "name": "DeadTree_3",
+  "group": "dead",
+  "height": 6,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   2.8858682099848023,
+   6,
+   2.905062897770912
+  ],
+  "clips": [],
+  "bytes": 126468
+ },
+ {
+  "id": "flower_flower_3_group",
+  "name": "Flower_3_Group",
+  "group": "flower",
+  "height": 0.5,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   0.36218881308778217,
+   0.5,
+   0.3871665992392423
+  ],
+  "clips": [],
+  "bytes": 75760
+ },
+ {
+  "id": "flower_flower_4_group",
+  "name": "Flower_4_Group",
+  "group": "flower",
+  "height": 0.5,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   0.3579999249419644,
+   0.5,
+   0.2749610258184003
+  ],
+  "clips": [],
+  "bytes": 86984
+ },
+ {
+  "id": "fungus_mushroom_common",
+  "name": "Mushroom_Common",
+  "group": "fungus",
+  "height": 0.35,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   0.4256818015886624,
+   0.35,
+   0.5883512079217642
+  ],
+  "clips": [],
+  "bytes": 36980
+ },
+ {
+  "id": "fungus_mushroom_laetiporus",
+  "name": "Mushroom_Laetiporus",
+  "group": "fungus",
+  "height": 0.35,
+  "pack": "Stylized Nature MegaKit[Standard]",
+  "size": [
+   0.6233864536460693,
+   0.35000000000000003,
+   0.5034352850925774
+  ],
+  "clips": [],
+  "bytes": 52732
+ },
+ {
+  "id": "palm_palmtree_1",
+  "name": "PalmTree_1",
+  "group": "palm",
+  "height": 9,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   5.7906263455996925,
+   9,
+   5.251360774830962
+  ],
+  "clips": [],
+  "bytes": 28816
+ },
+ {
+  "id": "palm_palmtree_3",
+  "name": "PalmTree_3",
+  "group": "palm",
+  "height": 9,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   6.590810481485473,
+   9.000000000000002,
+   5.759517657915895
+  ],
+  "clips": [],
+  "bytes": 26816
+ },
+ {
+  "id": "wood_woodlog_moss",
+  "name": "WoodLog_Moss",
+  "group": "wood",
+  "height": 0.8,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   1.0421107220301717,
+   0.8000000000000002,
+   3.1035370227828345
+  ],
+  "clips": [],
+  "bytes": 15132
+ },
+ {
+  "id": "wood_treestump_moss",
+  "name": "TreeStump_Moss",
+  "group": "wood",
+  "height": 0.8,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   1.749816777690115,
+   0.8,
+   1.3274434609535097
+  ],
+  "clips": [],
+  "bytes": 6656
+ },
+ {
+  "id": "mossrock_rock_moss_2",
+  "name": "Rock_Moss_2",
+  "group": "mossrock",
+  "height": 1.6,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   1.4167969676942946,
+   1.5999999999999999,
+   1.5044144036244291
+  ],
+  "clips": [],
+  "bytes": 4560
+ },
+ {
+  "id": "mossrock_rock_moss_4",
+  "name": "Rock_Moss_4",
+  "group": "mossrock",
+  "height": 1.6,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   1.5181927592902151,
+   1.6000000000000003,
+   2.553255810893338
+  ],
+  "clips": [],
+  "bytes": 5244
+ },
+ {
+  "id": "waterplant_lilypad",
+  "name": "Lilypad",
+  "group": "waterplant",
+  "height": 0.1,
+  "pack": "Ultimate Nature Pack - Jun 2019",
+  "size": [
+   0.5420512068854719,
+   0.1,
+   0.5383955432262292
+  ],
+  "clips": [],
+  "bytes": 8860
+ },
+ {
+  "id": "textured_tree_2",
+  "name": "Tree_2",
+  "group": "textured",
+  "height": 10,
+  "pack": "Textured Stylized Trees - May 2020",
+  "size": [
+   10.844013756706502,
+   10,
+   10.80222587714561
+  ],
+  "clips": [],
+  "bytes": 49628
+ },
+ {
+  "id": "textured_tree_7",
+  "name": "Tree_7",
+  "group": "textured",
+  "height": 10,
+  "pack": "Textured Stylized Trees - May 2020",
+  "size": [
+   9.464403415568672,
+   10,
+   7.629264039981412
+  ],
+  "clips": [],
+  "bytes": 48820
+ },
+ {
+  "id": "fungus_mushroom_2",
+  "name": "Mushroom_2",
+  "group": "fungus",
+  "height": 0.4,
+  "pack": "Nature Crops Pack - Jan 2020",
+  "size": [
+   0.2530499745535402,
+   0.4,
+   0.2530499745535402
+  ],
+  "clips": [],
+  "bytes": 11804
+ },
+ {
+  "id": "dinosaur_triceratops",
+  "name": "Triceratops",
+  "group": "dinosaur",
+  "height": 2.6,
+  "pack": "Dinosaur Animated Pack - Dec 2018",
+  "size": [
+   0.8278492537649103,
+   2.5999999999999996,
+   3.1957576117580704
+  ],
+  "clips": [
+   {
+    "name": "Armature|Triceratops_Walk",
+    "duration": 2.9166667461395264
+   },
+   {
+    "name": "Armature|Triceratops_Idle",
+    "duration": 2.5416667461395264
+   },
+   {
+    "name": "Armature|Triceratops_Jump",
+    "duration": 1.6666666269302368
+   }
+  ],
+  "bytes": 305500
+ },
+ {
+  "id": "dinosaur_trex",
+  "name": "Trex",
+  "group": "dinosaur",
+  "height": 4,
+  "pack": "Dinosaur Animated Pack - Dec 2018",
+  "size": [
+   2.1132521830415483,
+   3.9999999999999996,
+   7.996346344724609
+  ],
+  "clips": [
+   {
+    "name": "Armature|TRex_Jump",
+    "duration": 1.4583333730697632
+   },
+   {
+    "name": "Armature|TRex_Idle",
+    "duration": 2.5
+   },
+   {
+    "name": "Armature|TRex_Walk",
+    "duration": 1.375
+   }
+  ],
+  "bytes": 378472
+ },
+ {
+  "id": "dinosaur_parasaurolophus",
+  "name": "Parasaurolophus",
+  "group": "dinosaur",
+  "height": 3.6,
+  "pack": "Dinosaur Animated Pack - Dec 2018",
+  "size": [
+   1.226219095625329,
+   3.6,
+   7.383203797435663
+  ],
+  "clips": [
+   {
+    "name": "Armature|Parasaurolophus_Walk",
+    "duration": 1.1666666269302368
+   },
+   {
+    "name": "Armature|Parasaurolophus_Jump",
+    "duration": 1.3333333730697632
+   },
+   {
+    "name": "Armature|Parasaurolophus_Idle",
+    "duration": 2.5
+   }
+  ],
+  "bytes": 399496
+ },
+ {
+  "id": "smallanimal_frog",
+  "name": "Frog",
+  "group": "smallanimal",
+  "height": 0.23,
+  "pack": "Easy Animated Enemy Pack - Jan 2019",
+  "size": [
+   0.5471599128494395,
+   0.22999999999999998,
+   0.5020634262909555
+  ],
+  "clips": [
+   {
+    "name": "FrogArmature|Frog_Jump",
+    "duration": 0.875
+   },
+   {
+    "name": "FrogArmature|Frog_Idle",
+    "duration": 2.5
+   }
+  ],
+  "bytes": 232812
+ },
+ {
+  "id": "smallanimal_snake",
+  "name": "Snake",
+  "group": "smallanimal",
+  "height": 0.65,
+  "pack": "Easy Animated Enemy Pack - Jan 2019",
+  "size": [
+   0.22374460277032054,
+   0.65,
+   0.6219232396601834
+  ],
+  "clips": [
+   {
+    "name": "SnakeArmature|Snake_Walk",
+    "duration": 0.8333333134651184
+   },
+   {
+    "name": "SnakeArmature|Snake_Idle",
+    "duration": 2.0833332538604736
+   },
+   {
+    "name": "SnakeArmature|Snake_Jump",
+    "duration": 0.9583333134651184
+   }
+  ],
+  "bytes": 136844
+ },
+ {
+  "id": "insect_wasp",
+  "name": "Wasp",
+  "group": "insect",
+  "height": 0.12,
+  "pack": "Easy Animated Enemy Pack - Jan 2019",
+  "size": [
+   0.16032481273726557,
+   0.12000000000000001,
+   0.08418210470027779
+  ],
+  "clips": [
+   {
+    "name": "WaspArmature|Wasp_Flying",
+    "duration": 1.5
+   }
+  ],
+  "bytes": 435212
+ },
+ {
+  "id": "bush_usn_bush_large",
+  "name": "Bush_Large",
+  "group": "bush",
+  "height": 2.8,
+  "pack": "Ultimate Stylized Nature - May 2022",
+  "size": [
+   3.0282792273181354,
+   2.8,
+   2.8006117393901278
+  ],
+  "clips": [],
+  "bytes": 8120
+ },
+ {
+  "id": "flower_usn_flower_1_clump",
+  "name": "Flower_1_Clump",
+  "group": "flower",
+  "height": 0.55,
+  "pack": "Ultimate Stylized Nature - May 2022",
+  "size": [
+   0.38597936844835024,
+   0.55,
+   0.35653801918633776
+  ],
+  "clips": [],
+  "bytes": 35940
+ },
+ {
+  "id": "dead_usn_deadtree_5",
+  "name": "DeadTree_5",
+  "group": "dead",
+  "height": 6,
+  "pack": "Ultimate Stylized Nature - May 2022",
+  "size": [
+   3.320026716471382,
+   6,
+   3.5343014166939106
+  ],
+  "clips": [],
+  "bytes": 27720
+ },
+ {
+  "id": "understory_usn_plant_1",
+  "name": "Plant_1",
+  "group": "understory",
+  "height": 1.4,
+  "pack": "Ultimate Stylized Nature - May 2022",
+  "size": [
+   2.5333289379538324,
+   1.4,
+   2.4496482089393155
+  ],
+  "clips": [],
+  "bytes": 5776
+ }
 ]

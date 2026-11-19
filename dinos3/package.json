@@ -1,6 +1,6 @@
 {
-  "name": "dinos-stezka-oziva",
-  "version": "2.7.1",
+  "name": "dinos3",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,8 +10,7 @@
     "render:qa": "node tools/render-cpu.mjs run"
   },
   "dependencies": {
-    "three": "0.180.0",
-    "@dimforge/rapier3d-compat": "0.19.3"
+    "three": "0.180.0"
   },
   "devDependencies": {
     "vite": "6.1.0",

@@ -1,15 +1,28 @@
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { createNatureLayout, sampleProp, WILDLIFE, sampleAnimal, POND_OUTLINE } from '../game/nature-layout.mjs';
 import { route } from '../game/environment.mjs';
+/** Komprimované modely mají polohy a normály jako normalizovaná celá čísla. Před přepočtem
+ * do souřadnic světa je převedeme na desetinná, jinak by se hodnoty mimo rozsah ořízly. */
+export function toFloatAttributes(geo) {
+  for (const name of ['position', 'normal']) {
+    const a = geo.attributes[name];
+    if (!a || a.array instanceof Float32Array) continue;
+    const out = new Float32Array(a.count * a.itemSize);
+    for (let i = 0; i < a.count; i++) for (let k = 0; k < a.itemSize; k++) out[i * a.itemSize + k] = a.getComponent(i, k);
+    geo.setAttribute(name, new T.BufferAttribute(out, a.itemSize));
+  }
+  return geo;
+}
 export class NatureBank {
   constructor() {
     this.models = new Map();
   }
   async load(asset) {
     this.manifest = await fetch(asset('nature/manifest.json')).then((r) => r.json());
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     let index = 0;
     await Promise.all(
       Array.from({ length: 5 }, async () => {
@@ -55,6 +68,7 @@ export class NatureWorld {
       src.traverse((o) => {
         if (!o.isMesh) return;
         const geo = o.geometry.clone();
+        toFloatAttributes(geo);
         geo.applyMatrix4(o.matrixWorld);
         const mesh = new T.InstancedMesh(geo, o.material, entries.length);
         mesh.frustumCulled = false;

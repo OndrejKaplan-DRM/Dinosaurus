@@ -3,6 +3,7 @@ import { Developer } from './ui/developer.mjs';
 import { Environment, Atmosphere, route, biome, WEATHER } from './game/environment.mjs';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { Runner, LANE, STEP, obstacleX } from './game/core.mjs';
 import { Raptor } from './render/raptor.mjs';
 import { World } from './render/world.mjs';
@@ -776,7 +777,7 @@ async function init3D(context) {
     ),
   );
   $('loadtext').textContent = 'Dinoš si protahuje nohy…';
-  const gltf = await loadWithDeadline(new GLTFLoader().loadAsync(asset('models/raptor.glb')));
+  const gltf = await loadWithDeadline(new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(asset('models/raptor.glb')));
   gltf.scene.traverse((o) => {
     if (o.isSkinnedMesh && o.material.map) {
       o.material.map.colorSpace = T.SRGBColorSpace;

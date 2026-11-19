@@ -2,6 +2,7 @@ import * as T from 'three';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, basename } from 'node:path';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
@@ -49,7 +50,7 @@ export async function loadSource(a) {
       for (const k of Object.keys(m)) if (/Texture$/.test(k)) delete m[k];
       for (const k of Object.keys(m.pbrMetallicRoughness || {})) if (/Texture$/.test(k)) delete m.pbrMetallicRoughness[k];
     }
-    const g = await new GLTFLoader().parseAsync(JSON.stringify(j), '');
+    const g = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(JSON.stringify(j), '');
     root = g.scene;
     const maps = new Map();
     for (const m of mats) {

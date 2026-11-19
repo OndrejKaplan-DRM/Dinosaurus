@@ -1,6 +1,7 @@
 /** Geometry inspection only. This does not pretend to be a WebGL browser. */
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -39,7 +40,7 @@ export async function loadModel() {
   out.writeUInt32LE(0x4e4f534a, 16);
   const all = Buffer.concat([out, json, bin]);
   const gltf = await new Promise((ok, no) =>
-    new GLTFLoader().parse(all.buffer.slice(all.byteOffset, all.byteOffset + all.byteLength), '', ok, no),
+    new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parse(all.buffer.slice(all.byteOffset, all.byteOffset + all.byteLength), '', ok, no),
   );
   const map = new T.Texture(await loadImage(sourceImage));
   map.flipY = false;

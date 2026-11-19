@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { NatureWorld } from '../src/render/nature.mjs';
 import { createNatureLayout, sampleProp, sampleAnimal, WILDLIFE, POND_OUTLINE } from '../src/game/nature-layout.mjs';
 import { createCanvas, Image, Path2D } from '@napi-rs/canvas';
@@ -36,7 +37,7 @@ for (const m of manifest) {
   h.writeUInt32LE(json.length, 12);
   h.writeUInt32LE(0x4e4f534a, 16);
   const out = Buffer.concat([h, json, bin]),
-    g = await new GLTFLoader().parseAsync(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength), '');
+    g = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength), '');
   bank.models.set(m.id, { ...g, meta: m });
 }
 const world = new NatureWorld(new T.Scene(), bank),

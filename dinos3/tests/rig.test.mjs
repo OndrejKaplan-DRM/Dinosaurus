@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
-import RAPIER from '@dimforge/rapier3d-compat';
+import { Debris } from '../src/render/debris.mjs';
 import { loadTestModel } from '../tools/load-test-model.mjs';
 import { Raptor } from '../src/render/raptor.mjs';
 import { Runner, STEP } from '../src/game/core.mjs';
@@ -86,17 +86,26 @@ test('bone overlays do not accumulate over repeated run cycles', () => {
   for (let i = 0; i < 120; i++) p.update(STEP, s);
   assert.ok(q.angleTo(p.bones.tail3.quaternion) < 0.015);
 });
-test('Rapier debris lands on the actual ground collider', async () => {
-  await RAPIER.init();
-  const world = new RAPIER.World({ x: 0, y: -18, z: 0 });
-  world.timestep = STEP;
-  const ground = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, -0.2, 0));
-  world.createCollider(RAPIER.ColliderDesc.cuboid(20, 0.2, 20), ground);
-  const b = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(0, 2, 0));
-  world.createCollider(RAPIER.ColliderDesc.cuboid(0.1, 0.1, 0.1).setRestitution(0.3), b);
-  for (let i = 0; i < 240; i++) world.step();
-  assert.ok(Math.abs(b.translation().y - 0.1) < 0.04);
-  world.free();
+test('debris falls, bounces lower each time, rests on the ground and expires', () => {
+  const debris = new Debris(8, () => 0.5);
+  debris.burst(0, 1, -5, 4);
+  assert.equal(debris.active, 4);
+  const p = debris.particles[0];
+  let peak = 0;
+  let lowest = Infinity;
+  for (let i = 0; i < 150; i++) {
+    debris.step(STEP);
+    peak = Math.max(peak, p.y);
+    lowest = Math.min(lowest, p.y);
+  }
+  assert.ok(peak > 1.6 && peak < 2.2, 'peak ' + peak);
+  assert.ok(lowest >= 0.08 - 1e-9, 'never below the ground');
+  for (let i = 0; i < 100; i++) debris.step(STEP);
+  assert.ok(Math.abs(p.y - 0.08) < 0.02, 'rests on the ground, y ' + p.y);
+  for (let i = 0; i < 60; i++) debris.step(STEP);
+  assert.equal(debris.active, 0, 'expired after 2.2 s');
+  debris.burst(0, 0, 0, 20);
+  assert.equal(debris.active, 8, 'pool is bounded');
 });
 test('held crouch takes alternating steps, keeps feet above ground and clears the log', () => {
   const { p, s } = rig(1);

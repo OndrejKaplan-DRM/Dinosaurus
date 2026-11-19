@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 // Geometry and animation only. Production loads the unmodified, textured GLB.
 export async function loadTestModel() {
   const b = await readFile(new URL('../public/models/raptor.glb', import.meta.url)),
@@ -23,5 +24,5 @@ export async function loadTestModel() {
   h.writeUInt32LE(json.length, 12);
   h.writeUInt32LE(0x4e4f534a, 16);
   const out = Buffer.concat([h, json, bin]);
-  return new Promise((ok, no) => new GLTFLoader().parse(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength), '', ok, no));
+  return new Promise((ok, no) => new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parse(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength), '', ok, no));
 }
