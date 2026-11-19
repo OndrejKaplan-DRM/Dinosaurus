@@ -18,3 +18,12 @@ Finální testy: 80/80. Build: 63,721,172 bytů. Modely GLB: 15,867,192 bytů. �
 
 Další realistické kroky: přímý WebGL performance profil na cílovém PC, podrobnější přirozené břehy a vzdálený horizont, jemnější chování zvířat. Stávající klidové klipy nejsou simulací spásání vegetace. Nezaměňovat výtvarnou stylizaci za přesnou paleo-rekonstrukci.
 
+## Dodatek 19. 11. 2026 — verze 2.7.1 (Claude, sešna „herní frameworky“)
+
+- Projekt je nově v gitu: https://github.com/OndrejKaplan-DRM/Dinosaurus (větev `main`). Archiv 2.7 byl vložen beze změny souborů, potom přibyla tato verze.
+- Jediná věcná změna 2.7.1: tři textury `public/textures/*.jpg` nahrazeny vlastními ze skriptu `tools/make-textures.py` (CC0). Kód hry se nezměnil, jen číslo verze v `package.json`, `src/main.mjs`, `tools/build.mjs` a `tools/validate-build.mjs`.
+- Ověřeno: 80/80 testů (`TESTY_2_7_1.txt`), sestavení 63 730 424 B a kontrola vložených dat (`BUILD_2_7_1.json`), spuštění v Chrome se softwarovým WebGL 2 (3D větev, bez chyb v konzoli). Fyzická GPU stále neměřena.
+- Sestavení 2.7.0 bylo ověřeno jako opakovatelné: nový build ze zdrojů měl stejný otisk jako odevzdaný soubor.
+- Rozbor hry a hodnocení nabídek s deseti doloženými vadami: `docs/ANALYZA.md`, `docs/SHELL_HODNOCENI.md`. Vady nabídek zatím opravené nejsou.
+- `SOUBORY_SHA256.json` je přepočítaný pro stav 2.7.1.
+

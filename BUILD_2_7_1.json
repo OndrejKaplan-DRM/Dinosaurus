@@ -1,0 +1,9 @@
+{
+  "version": "2.7.1",
+  "inlineScripts": 2,
+  "embeddedBinaryAssets": 83,
+  "embeddedFonts": 4,
+  "hashes": "all identical to source",
+  "needsServer": false,
+  "bytes": 63730424
+}

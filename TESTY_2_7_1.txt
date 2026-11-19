@@ -1,0 +1,495 @@
+
+> dinos-stezka-oziva@2.7.1 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: compatibility renderer loads the actual 88 GLB frames and paints a real menu
+ok 1 - compatibility renderer loads the actual 88 GLB frames and paints a real menu
+  ---
+  duration_ms: 56.151255
+  type: 'test'
+  ...
+# Subtest: running, jumping, crouching and stumbling render without a GPU
+ok 2 - running, jumping, crouching and stumbling render without a GPU
+  ---
+  duration_ms: 425.914188
+  type: 'test'
+  ...
+# Subtest: resize uses the actual mobile canvas width and capped pixel ratio
+ok 3 - resize uses the actual mobile canvas width and capped pixel ratio
+  ---
+  duration_ms: 50.668612
+  type: 'test'
+  ...
+# Subtest: actual Canvas ground moves towards the camera and remains stationary in the menu
+ok 4 - actual Canvas ground moves towards the camera and remains stationary in the menu
+  ---
+  duration_ms: 140.720767
+  type: 'test'
+  ...
+# Subtest: actual Three ground UV offset follows the approaching scenery
+ok 5 - actual Three ground UV offset follows the approaching scenery
+  ---
+  duration_ms: 127.866297
+  type: 'test'
+  ...
+# Subtest: the mobile grove camera keeps the selected dinosaur visible at both clearing edges
+ok 6 - the mobile grove camera keeps the selected dinosaur visible at both clearing edges
+  ---
+  duration_ms: 107.389021
+  type: 'test'
+  ...
+# Subtest: every weather preset renders at day and night with late-game hazards
+ok 7 - every weather preset renders at day and night with late-game hazards
+  ---
+  duration_ms: 518.922489
+  type: 'test'
+  ...
+# Subtest: 3D ground and scenery share route deformation and later vegetation unlocks
+ok 8 - 3D ground and scenery share route deformation and later vegetation unlocks
+  ---
+  duration_ms: 103.568865
+  type: 'test'
+  ...
+# Subtest: all six crouch atlas frames have visibly different stepping poses
+ok 9 - all six crouch atlas frames have visibly different stepping poses
+  ---
+  duration_ms: 16.273418
+  type: 'test'
+  ...
+# Subtest: left and right have the correct sign, clamps at the outer lanes
+ok 10 - left and right have the correct sign, clamps at the outer lanes
+  ---
+  duration_ms: 2.93272
+  type: 'test'
+  ...
+# Subtest: jump clears a rock and lands in a stable state
+ok 11 - jump clears a rock and lands in a stable state
+  ---
+  duration_ms: 0.798727
+  type: 'test'
+  ...
+# Subtest: uncrouched trunk hits the overhead log
+ok 12 - uncrouched trunk hits the overhead log
+  ---
+  duration_ms: 1.496304
+  type: 'test'
+  ...
+# Subtest: a held crouch passes an overhead log without a tail death
+ok 13 - a held crouch passes an overhead log without a tail death
+  ---
+  duration_ms: 0.576894
+  type: 'test'
+  ...
+# Subtest: releasing crouch under the log waits until the tail has cleared
+ok 14 - releasing crouch under the log waits until the tail has cleared
+  ---
+  duration_ms: 0.569132
+  type: 'test'
+  ...
+# Subtest: obstacles in other lanes cannot cause phantom hits
+ok 15 - obstacles in other lanes cannot cause phantom hits
+  ---
+  duration_ms: 0.231362
+  type: 'test'
+  ...
+# Subtest: bite stays active for its whole window, so an early bite works
+ok 16 - bite stays active for its whole window, so an early bite works
+  ---
+  duration_ms: 0.723599
+  type: 'test'
+  ...
+# Subtest: a bite cannot destroy an out-of-reach object or trní
+ok 17 - a bite cannot destroy an out-of-reach object or trní
+  ---
+  duration_ms: 0.174923
+  type: 'test'
+  ...
+# Subtest: shield grants protection across several simultaneous overlaps
+ok 18 - shield grants protection across several simultaneous overlaps
+  ---
+  duration_ms: 0.402697
+  type: 'test'
+  ...
+# Subtest: practice catches the stumble and keeps going
+ok 19 - practice catches the stumble and keeps going
+  ---
+  duration_ms: 0.377773
+  type: 'test'
+  ...
+# Subtest: pause freezes all simulation state
+ok 20 - pause freezes all simulation state
+  ---
+  duration_ms: 0.697421
+  type: 'test'
+  ...
+# Subtest: pickup height follows the body, not just the feet
+ok 21 - pickup height follows the body, not just the feet
+  ---
+  duration_ms: 0.130708
+  type: 'test'
+  ...
+# Subtest: swept collision cannot tunnel through obstacles at a coarse step
+ok 22 - swept collision cannot tunnel through obstacles at a coarse step
+  ---
+  duration_ms: 0.136133
+  type: 'test'
+  ...
+# Subtest: seeded tracks are repeatable and never block all three lanes
+ok 23 - seeded tracks are repeatable and never block all three lanes
+  ---
+  duration_ms: 55.894481
+  type: 'test'
+  ...
+# Subtest: reaction gap remains sufficient even at top speed
+ok 24 - reaction gap remains sufficient even at top speed
+  ---
+  duration_ms: 0.245827
+  type: 'test'
+  ...
+# Subtest: pooled object count remains bounded through 10 minutes of practice
+ok 25 - pooled object count remains bounded through 10 minutes of practice
+  ---
+  duration_ms: 201.6255
+  type: 'test'
+  ...
+# Subtest: the minimum crouch can be triggered by a touch swipe
+ok 26 - the minimum crouch can be triggered by a touch swipe
+  ---
+  duration_ms: 0.671762
+  type: 'test'
+  ...
+# Subtest: all three amber pickups preserve their two-metre spacing when a row is spawned
+ok 27 - all three amber pickups preserve their two-metre spacing when a row is spawned
+  ---
+  duration_ms: 0.20568
+  type: 'test'
+  ...
+# Subtest: a lateral collision during the end of a forward sweep is detected
+ok 28 - a lateral collision during the end of a forward sweep is detected
+  ---
+  duration_ms: 0.101279
+  type: 'test'
+  ...
+# Subtest: day is 864 active seconds at 1:100 and pause freezes weather
+ok 29 - day is 864 active seconds at 1:100 and pause freezes weather
+  ---
+  duration_ms: 11.023929
+  type: 'test'
+  ...
+# Subtest: seeded random weather changes and forced presets converge gently
+ok 30 - seeded random weather changes and forced presets converge gently
+  ---
+  duration_ms: 7.850508
+  type: 'test'
+  ...
+# Subtest: route turns both ways and changes elevation while keeping the player origin stable
+ok 31 - route turns both ways and changes elevation while keeping the player origin stable
+  ---
+  duration_ms: 3.610462
+  type: 'test'
+  ...
+# Subtest: water is nonfatal, clears combo once, and jumping avoids the splash
+ok 32 - water is nonfatal, clears combo once, and jumping avoids the splash
+  ---
+  duration_ms: 1.473229
+  type: 'test'
+  ...
+# Subtest: roots are a low jump hazard and unlock only later
+ok 33 - roots are a low jump hazard and unlock only later
+  ---
+  duration_ms: 0.815015
+  type: 'test'
+  ...
+# Subtest: changing time scale preserves the current hour
+ok 34 - changing time scale preserves the current hour
+  ---
+  duration_ms: 0.32859
+  type: 'test'
+  ...
+# Subtest: moon is a textured background and foreground atmosphere cannot paint over a tree
+ok 35 - moon is a textured background and foreground atmosphere cannot paint over a tree
+  ---
+  duration_ms: 10.99266
+  type: 'test'
+  ...
+# Subtest: Three sky is scene background, with no depth-independent celestial sprites
+ok 36 - Three sky is scene background, with no depth-independent celestial sprites
+  ---
+  duration_ms: 112.024077
+  type: 'test'
+  ...
+# Subtest: moon phase changes illuminated area; paused sky remains pixel-identical; clouds move with time
+ok 37 - moon phase changes illuminated area; paused sky remains pixel-identical; clouds move with time
+  ---
+  duration_ms: 100.525082
+  type: 'test'
+  ...
+# Subtest: wet weather reduces far visibility without covering the player
+ok 38 - wet weather reduces far visibility without covering the player
+  ---
+  duration_ms: 0.360833
+  type: 'test'
+  ...
+# Subtest: all ten new details have nonempty Canvas silhouettes and actual bounded meshes
+ok 39 - all ten new details have nonempty Canvas silhouettes and actual bounded meshes
+  ---
+  duration_ms: 46.932562
+  type: 'test'
+  ...
+# Subtest: late sections change vegetation composition and fauna toggle works
+ok 40 - late sections change vegetation composition and fauna toggle works
+  ---
+  duration_ms: 0.927813
+  type: 'test'
+  ...
+# Subtest: moving hazards collide at their animated positions, stay inside reserved lanes and freeze in pause
+ok 41 - moving hazards collide at their animated positions, stay inside reserved lanes and freeze in pause
+  ---
+  duration_ms: 7.233755
+  type: 'test'
+  ...
+# Subtest: hazard unlocks and dev seek preserve safety and do not queue missed rows
+ok 42 - hazard unlocks and dev seek preserve safety and do not queue missed rows
+  ---
+  duration_ms: 3.748618
+  type: 'test'
+  ...
+# Subtest: developer protection does not stop normal collision behavior after reset
+ok 43 - developer protection does not stop normal collision behavior after reset
+  ---
+  duration_ms: 0.56426
+  type: 'test'
+  ...
+# Subtest: moving hazard grazing collision uses relative sweep rather than its lane centre
+ok 44 - moving hazard grazing collision uses relative sweep rather than its lane centre
+  ---
+  duration_ms: 0.511387
+  type: 'test'
+  ...
+# Subtest: free movement supports all directions and releasing stops the selected animal
+ok 45 - free movement supports all directions and releasing stops the selected animal
+  ---
+  duration_ms: 6.206558
+  type: 'test'
+  ...
+# Subtest: diagonal motion is normalized and sprint is faster
+ok 46 - diagonal motion is normalized and sprint is faster
+  ---
+  duration_ms: 0.611776
+  type: 'test'
+  ...
+# Subtest: a free jump lands, cannot double jump, and movement stays in the visible clearing
+ok 47 - a free jump lands, cannot double jump, and movement stays in the visible clearing
+  ---
+  duration_ms: 11.362383
+  type: 'test'
+  ...
+# Subtest: the other animals keep roaming while the selected one stands still; exit returns autonomy
+ok 48 - the other animals keep roaming while the selected one stands still; exit returns autonomy
+  ---
+  duration_ms: 1.492385
+  type: 'test'
+  ...
+# Subtest: a ground feature travels towards +Z exactly as obstacles do in both renderers
+ok 49 - a ground feature travels towards +Z exactly as obstacles do in both renderers
+  ---
+  duration_ms: 0.48736
+  type: 'test'
+  ...
+# Subtest: short recordings finish naturally and never restart over themselves
+ok 50 - short recordings finish naturally and never restart over themselves
+  ---
+  duration_ms: 3.364279
+  type: 'test'
+  ...
+# Subtest: rapid menu/pause/run/shield changes never overlap music sources
+ok 51 - rapid menu/pause/run/shield changes never overlap music sources
+  ---
+  duration_ms: 10.184739
+  type: 'test'
+  ...
+# Subtest: rapid requests keep the original fade deadline and choose the latest cue
+ok 52 - rapid requests keep the original fade deadline and choose the latest cue
+  ---
+  duration_ms: 0.235661
+  type: 'test'
+  ...
+# Subtest: a missing decode cannot create a stale asynchronously started song
+ok 53 - a missing decode cannot create a stale asynchronously started song
+  ---
+  duration_ms: 0.18267
+  type: 'test'
+  ...
+# Subtest: an old ended callback cannot clear or disconnect the new voice
+ok 54 - an old ended callback cannot clear or disconnect the new voice
+  ---
+  duration_ms: 0.308775
+  type: 'test'
+  ...
+# Subtest: long suspension or throttled frames cannot stack missed music changes
+ok 55 - long suspension or throttled frames cannot stack missed music changes
+  ---
+  duration_ms: 0.149974
+  type: 'test'
+  ...
+# Subtest: start, run, rush, shield and pause preserve a playing exploration song
+ok 56 - start, run, rush, shield and pause preserve a playing exploration song
+  ---
+  duration_ms: 0.211708
+  type: 'test'
+  ...
+# Subtest: all four exploration variants play before any repeats
+ok 57 - all four exploration variants play before any repeats
+  ---
+  duration_ms: 0.133775
+  type: 'test'
+  ...
+# Subtest: entering the grove transitions to its expanded playlist without overlap
+ok 58 - entering the grove transitions to its expanded playlist without overlap
+  ---
+  duration_ms: 0.591572
+  type: 'test'
+  ...
+# Subtest: ten minutes of a long-song run rotates through all six eligible songs without overlap
+ok 59 - ten minutes of a long-song run rotates through all six eligible songs without overlap
+  ---
+  duration_ms: 0.838227
+  type: 'test'
+  ...
+# Subtest: manual next fades once and repeated clicks do not postpone the change
+ok 60 - manual next fades once and repeated clicks do not postpone the change
+  ---
+  duration_ms: 0.409257
+  type: 'test'
+  ...
+# Subtest: menu reaches both Night Menu and both Lazy Grove recordings before repeating
+ok 61 - menu reaches both Night Menu and both Lazy Grove recordings before repeating
+  ---
+  duration_ms: 0.858853
+  type: 'test'
+  ...
+# Subtest: developer can audition every supplied track through the same single-voice player
+ok 62 - developer can audition every supplied track through the same single-voice player
+  ---
+  duration_ms: 0.250649
+  type: 'test'
+  ...
+# Subtest: manual song waits for its decode and cannot stack sources or extend a fade
+ok 63 - manual song waits for its decode and cannot stack sources or extend a fade
+  ---
+  duration_ms: 0.16583
+  type: 'test'
+  ...
+# Subtest: auditioning the current song leaves no stuck skip request
+ok 64 - auditioning the current song leaves no stuck skip request
+  ---
+  duration_ms: 0.133104
+  type: 'test'
+  ...
+# Subtest: all 43 selected models import as self-contained GLBs
+ok 65 - all 43 selected models import as self-contained GLBs
+  ---
+  duration_ms: 0.609035
+  type: 'test'
+  ...
+# Subtest: layout is repeatable and density zero removes imported vegetation
+ok 66 - layout is repeatable and density zero removes imported vegetation
+  ---
+  duration_ms: 7.909663
+  type: 'test'
+  ...
+# Subtest: three dinosaurs contain working skeletal walk animation
+ok 67 - three dinosaurs contain working skeletal walk animation
+  ---
+  duration_ms: 3.779931
+  type: 'test'
+  ...
+# Subtest: herd instances use independent bones and pause stops their animation
+ok 68 - herd instances use independent bones and pause stops their animation
+  ---
+  duration_ms: 7.759337
+  type: 'test'
+  ...
+# Subtest: dinosaurs walk then rest and remain beside the road
+ok 69 - dinosaurs walk then rest and remain beside the road
+  ---
+  duration_ms: 0.439862
+  type: 'test'
+  ...
+# Subtest: developer switches affect imported scene and wildlife
+ok 70 - developer switches affect imported scene and wildlife
+  ---
+  duration_ms: 2.697922
+  type: 'test'
+  ...
+# Subtest: fallback visibly paints new scenery through all five biomes
+ok 71 - fallback visibly paints new scenery through all five biomes
+  ---
+  duration_ms: 2104.91332
+  type: 'test'
+  ...
+# Subtest: fauna atlas has distinct animated walk frames
+ok 72 - fauna atlas has distinct animated walk frames
+  ---
+  duration_ms: 75.623111
+  type: 'test'
+  ...
+# Subtest: broad undergrowth leaves all three lanes visually clear
+ok 73 - broad undergrowth leaves all three lanes visually clear
+  ---
+  duration_ms: 0.999008
+  type: 'test'
+  ...
+# using deprecated parameters for the initialization function; pass a single object instead
+# Subtest: the supplied GLB contains one usable skeletal animation and a coloured texture reference
+ok 74 - the supplied GLB contains one usable skeletal animation and a coloured texture reference
+  ---
+  duration_ms: 0.810595
+  type: 'test'
+  ...
+# Subtest: procedural crouch lowers the tail while the animated feet stay near ground
+ok 75 - procedural crouch lowers the tail while the animated feet stay near ground
+  ---
+  duration_ms: 103.934358
+  type: 'test'
+  ...
+# Subtest: crouched body stays below the overhead log through a complete animation cycle
+ok 76 - crouched body stays below the overhead log through a complete animation cycle
+  ---
+  duration_ms: 104.270479
+  type: 'test'
+  ...
+# Subtest: fall reaction never rotates the animal onto its back
+ok 77 - fall reaction never rotates the animal onto its back
+  ---
+  duration_ms: 23.803129
+  type: 'test'
+  ...
+# Subtest: bone overlays do not accumulate over repeated run cycles
+ok 78 - bone overlays do not accumulate over repeated run cycles
+  ---
+  duration_ms: 71.746238
+  type: 'test'
+  ...
+# Subtest: Rapier debris lands on the actual ground collider
+ok 79 - Rapier debris lands on the actual ground collider
+  ---
+  duration_ms: 60.354147
+  type: 'test'
+  ...
+# Subtest: held crouch takes alternating steps, keeps feet above ground and clears the log
+ok 80 - held crouch takes alternating steps, keeps feet above ground and clears the log
+  ---
+  duration_ms: 138.510809
+  type: 'test'
+  ...
+1..80
+# tests 80
+# suites 0
+# pass 80
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6923.249367

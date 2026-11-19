@@ -1,6 +1,6 @@
 # Dinoš 2.7 – rozbor hry (reverzní inženýrství)
 
-Zpracováno 19. 11. 2026 z archivu `Dinos_2.7` (stav z 8. 11. 2026). Rozbor nic v archivu nemění; všech 323 souborů ze `SOUBORY_SHA256.json` je v repu bajt po bajtu shodných. Hodnocení menu a nabídek je zvlášť v [SHELL_HODNOCENI.md](SHELL_HODNOCENI.md).
+Zpracováno 19. 11. 2026 z archivu `Dinos_2.7` (stav z 8. 11. 2026). Rozbor popisuje verzi 2.7.0; ta byla do repa vložena beze změny souborů (323 z 323 otisků). Verze 2.7.1 z téhož dne se liší jen třemi texturami, viz oddíl 7. Hodnocení menu a nabídek je zvlášť v [SHELL_HODNOCENI.md](SHELL_HODNOCENI.md).
 
 Značení jistoty: **[ověřeno]** = sama jsem spustila nebo změřila, **[z kódu]** = přečteno ve zdrojích, **[z dokumentů]** = tvrzení z přiložené historie, které jsem neověřovala, **[úsudek]** = můj závěr.
 
@@ -123,7 +123,7 @@ Sestavení čte 87 souborů z `public/`, převede je na `data:` adresy a vloží
 | 2.6 | — | 41,4 MB | 71 | obloha, pět úseků, pohyblivé překážky, Vývojář |
 | 2.7 | 8. 11. | 63,7 MB | 80 | 43 modelů krajiny a zvířat |
 
-Původní kód z Groku je v `puvodni_herni_zdroje/`. Přepis podle všeho dělal agent ChatGPT (soubor `AGENTS.md`, sebekritické zprávy v `historie/`) **[úsudek]**.
+Původní kód z Groku je v `puvodni_herni_zdroje/`. Přepis dělal ChatGPT (potvrzeno autorem hry, konverzace „Dinos_01_11_2026“).
 
 ## 5. Silné stránky
 
@@ -150,7 +150,7 @@ Podrobně v `LICENCE_A_PUVOD.md`. K veřejnému repu tři poznámky:
 
 - **Model raptora** je z Meshy. Podle dokumentace Meshy jsou modely z bezplatného tarifu pod CC BY 4.0 (stačí uvést zdroj) a modely z placených tarifů patří uživateli. Pro jistotu: *model created with Meshy*.
 - **Hudba** je ze Suno z účtu autora hry.
-- **Textury `ground.jpg`, `rock.jpg`, `wood.jpg`** pocházejí z exportu z Groku a samostatnou licenci nemají. Je to jediná položka s nejasným původem; dají se nahradit vlastními nebo generovanými.
+- **Textury `ground.jpg`, `rock.jpg`, `wood.jpg`** ve verzi 2.7.0 pocházely z exportu z Groku a neměly doloženou licenci. S balíky Quaternius se neshodují (porovnáno otisky se všemi 19 obrázky v `asset_sources/`) a původní kód z Groku je používal dřív, než balíky přibyly. Od verze 2.7.1 jsou nahrazené vlastními ze skriptu `zdroje/tools/make-textures.py` (CC0). Staré soubory zůstávají v historii gitu.
 
 Modely krajiny (Quaternius) a zvuky (Kenney) jsou CC0, písmo Fredoka má OFL.
 

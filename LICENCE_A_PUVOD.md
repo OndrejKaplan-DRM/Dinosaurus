@@ -8,7 +8,7 @@ Hudební OGG v public/music nyní pocházejí z osmi uživatelem dodaných výst
 
 `public/models/raptor.glb` je nezměněný 3D model převzatý z uživatelova exportu (v původní příloze také `Meshy_AI_raptor_dinosaurus_All_Animations.glb`). Obsahuje vlastní barevnou texturu. Její používání a práva k modelu se řídí podmínkami, s nimiž byl model získán; k modelu zde nebyla vymyšlena nová licence.
 
-`textures/ground.jpg`, `rock.jpg` a `wood.jpg` pocházejí rovněž z dodaného exportu. Kód je upravuje jen při zobrazení prostřednictvím materiálů, UV opakování a vertex barev; obrazové soubory zůstaly zachované. Původní export neobsahoval úplnou samostatnou licenci těchto tří souborů.
+`textures/ground.jpg`, `rock.jpg` a `wood.jpg` jsou od verze 2.7.1 (19. 11. 2026) nové: vytváří je skript `zdroje/tools/make-textures.py` z filtrovaného šumu, bez cizích podkladů, a jsou poskytnuté jako volné dílo (CC0 1.0). Průměrná barva a kontrast jsou nastavené podle původních souborů, aby materiály hry vypadaly stejně. Původní tři textury z exportu neměly doloženou licenci, proto byly nahrazeny; v historii gitu a ve starším sestaveném HTML verze 2.7.0 zůstávají, dokud se historie nepřepíše.
 
 ## Převzaté zvuky
 

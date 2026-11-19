@@ -3,4 +3,4 @@ const html=await readFile(new URL('../dist/Dinos_2_Stezka_oziva.html',import.met
 for(const[path,url]of Object.entries(assets)){if(!url.startsWith('data:'))throw Error('Externí zdroj: '+path);const data=Buffer.from(url.slice(url.indexOf(',')+1),'base64'),source=await readFile(new URL('../public/'+path,import.meta.url));if(sha(data)!==sha(source))throw Error('Změněná data: '+path);}
 for(const p of['models/raptor.glb','fallback/raptor-atlas.webp','fallback/raptor-atlas.json'])if(!assets[p])throw Error('Chybí '+p);
 if(/<(?:script|link)\b[^>]*(?:src|href)=["']\/(?!\/)/i.test(html))throw Error('Nevložený místní skript nebo CSS');
-console.log(JSON.stringify({version:'2.7.0',inlineScripts:scripts.length,embeddedBinaryAssets:Object.keys(assets).length,embeddedFonts:4,hashes:'all identical to source',needsServer:false,bytes:Buffer.byteLength(html)},null,2));
+console.log(JSON.stringify({version:'2.7.1',inlineScripts:scripts.length,embeddedBinaryAssets:Object.keys(assets).length,embeddedFonts:4,hashes:'all identical to source',needsServer:false,bytes:Buffer.byteLength(html)},null,2));
