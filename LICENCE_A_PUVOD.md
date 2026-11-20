@@ -43,3 +43,11 @@ Seznam a přesné verze vývojových závislostí jsou v `zdroje/package-lock.js
 ## Doplnění 2.4
 
 Nové procedurální kulisy, počasí, časový cyklus a terén jsou součástí zde vytvořeného herního kódu. Nebyly převzaty nové cizí modely ani nahrávky. Paleontologické podklady a hranice stylizace uvádí PRAVEKY_SVET_2_4.md.
+
+## Verze 3.0.0 (20. 11. 2026)
+
+- Model dinosaura: tentýž model z Meshy (účet autora hry), ve verzi 3 se zjednodušenou sítí a zmenšenou texturou.
+- Krajina a zvířata: tytéž modely Quaternius (CC0 1.0), komprimované; originály zůstávají v `asset_sources/`.
+- Textury: `wood.jpg` a `rock.jpg` vycházejí z textur `Bark_NormalTree.png` a `Rocks_Diffuse.png` z balíčků Quaternius (CC0 1.0), `ground.jpg` vytváří `dinos3/tools/make-textures.py` (CC0 1.0).
+- Hudba: osm skladeb ze Suno (účet autora hry), překódované z `suno_originaly/` do Ogg Opus.
+- Zvuky, písmo a Three.js beze změny. Knihovna Rapier ve verzi 3 není.

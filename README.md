@@ -39,3 +39,7 @@ Jde o stylizovaný park inspirovaný pozdní křídou. Parasaurolophus a T. rex 
 80 automatických testů prošlo: herní pravidla, podlézání, kolize, hudební hlasy, obloha, import všech modelů, animace, nezávislé kostry, přepínače, pět biomů, volný průhled všemi třemi pruhy a úsporné vykreslování. Validátor ověřil shodu všech vložených dat se zdroji. Závěrečná vizuální kontrola prohlížeče je zaznamenána v SESSION_HANDOFF.md.
 
 V prohlížeči byla ověřena zdrojová verze v režimu Canvas: menu, katalog 43 položek, přechod na 3200 m a pokračující běh přes 3300 m; diagnostika hlásila 11 nových zvířat, jediný hudební hlas a nulové chyby zvuku. Otevření 63,7MB samostatného HTML zde zastavila bezpečnostní politika testovacího prohlížeče. Jeho 83 vložených zdrojů bylo ověřeno proti originálům a přímo z HTML byly bez externích požadavků vykresleny čtyři scény. tools/render-nature-preview.mjs tento test opakuje. Obrázky ve složce ukazky jsou tyto rendery bez rozhraní, nikoli screenshoty WebGL. Výkon WebGL na fyzickém GPU nebyl v tomto prostředí změřen.
+
+## Dinoš 3 (20. 11. 2026)
+
+Přestavba hry je ve složce `dinos3/`, hotový soubor je `Dinos_3.html` (20,1 MB místo 63,7 MB). Popis změn, sestavení a zkoušek: `dinos3/README.md`. Vše výše popisuje verzi 2.7, která zůstává v repu beze změny.

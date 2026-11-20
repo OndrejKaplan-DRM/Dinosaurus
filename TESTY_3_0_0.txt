@@ -1,0 +1,13 @@
+Dinoš 3.0.0 — zkoušky 20. 11. 2026
+
+Jednotkové (npm test ve složce dinos3): 107 testů, 107 prošlo, 0 selhalo.
+
+V prohlížeči (Chrome se softwarovým WebGL 2, sestavený soubor Dinos_3.html otevřený z disku):
+- tools/qa/check.cjs MODE=funkce: 33 prošlo, 0 selhalo
+- tools/qa/check.cjs MODE=layout: 40 prošlo, 0 selhalo (1280×720, 390×844, 844×390, 667×375, 820×1180)
+- tools/qa/smoke.cjs: tři velikosti, 3D větev, 0 chyb v konzoli
+
+Kontrola sestavení (tools/validate-build.mjs): 83 vložených datových souborů a 4 písma, otisky shodné se zdroji.
+Velikost: 20 110 197 B (verze 2.7.0: 63 721 172 B). SHA-256: a2b61cfa432b4dd687e4b25d148154e3cd8a37ba836935d549dcb2fc8e7f43d6
+
+Neověřeno: skutečná grafická karta, zvuk poslechem, skutečný telefon, skutečný ovladač, Safari.

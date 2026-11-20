@@ -245,3 +245,4 @@ body.reduced .banner, body.reduced .toast { animation: none; }
 @media (prefers-reduced-motion: reduce) {
   .bootbar i, .banner, .toast { animation: none; }
 }
+body.touch [data-cid="pause.keys"] { display: none; }

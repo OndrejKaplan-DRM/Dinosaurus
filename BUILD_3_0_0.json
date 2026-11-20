@@ -1,0 +1,15 @@
+{
+  "version": "3.0.0",
+  "inlineScripts": 2,
+  "embeddedBinaryAssets": 83,
+  "embeddedFonts": 4,
+  "hashes": "all identical to source",
+  "needsServer": false,
+  "bytes": 20110197,
+  "sha256": "a2b61cfa432b4dd687e4b25d148154e3cd8a37ba836935d549dcb2fc8e7f43d6",
+  "date": "2026-11-20",
+  "previous": {
+    "version": "2.7.0",
+    "bytes": 63721172
+  }
+}

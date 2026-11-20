@@ -27,3 +27,15 @@ Další realistické kroky: přímý WebGL performance profil na cílovém PC, p
 - Rozbor hry a hodnocení nabídek s deseti doloženými vadami: `docs/ANALYZA.md`, `docs/SHELL_HODNOCENI.md`. Vady nabídek zatím opravené nejsou.
 - `SOUBORY_SHA256.json` je přepočítaný pro stav 2.7.1.
 
+
+## Dodatek 20. 11. 2026 — verze 3.0.0 (Claude, sešna „herní frameworky“)
+
+- Nová hra je ve složce `dinos3/` na větvi `v3`, sestavený soubor `Dinos_3.html` v kořeni. Verze 2.7 a 2.7.1 (`zdroje/`, `Dinos_2_Stezka_oziva.html`) zůstaly beze změny; nic se nemazalo a historie se nepřepisovala.
+- Popis, mapa složek, postup sestavení a zkoušek, původ a licence: `dinos3/README.md`. Výsledky: `TESTY_3_0_0.txt`, `BUILD_3_0_0.json`.
+- Velikost 63 721 172 B → 20 110 197 B: model dinosaura zjednodušen na 20 % trojúhelníků s texturou 1024 px, krajina s kompresí meshopt a texturami WebP 512 px, hudba Opus 56 kb/s z původních MP3 v `suno_originaly/`, knihovna Rapier nahrazena vlastní balistikou úlomků.
+- Nové herní prvky: lovecký trans, etapy s prémií, další dny, noční bonus, déšť s účinkem, oživení, denní výprava, postup mezi běhy (hodnosti, úkoly, zásoba jantaru, zbarvení).
+- Nabídky jsou postavené znovu z deklarací; deset vad z `docs/SHELL_HODNOCENI.md` je opraveno a každou hlídá zkouška.
+- Dvě vady nalezené až zkouškami v prohlížeči a opravené: prázdná horní vrstva nabídek zakrývala celé menu, takže myší nešlo kliknout na nic (klávesnice fungovala); tabulka v okně O hře přetékala na telefonu na výšku.
+- Pasti pro další práci: kvantované atributy modelů je před `applyMatrix4` nutné převést na Float32 (`toFloatAttributes` v `src/render/nature.mjs`); `GLTFLoader` potřebuje `setMeshoptDecoder`; po zeštíhlení dat se musí přepsat velikosti v `public/nature/manifest.json` (dělá to `tools/optimize-assets.sh`); `page.click` Playwrightu při softwarovém vykreslování vyprší, zkoušky proto klikají přes vlastní funkci s kontrolou zásahu.
+- Hranice: skutečná grafická karta, zvuk poslechem, skutečný telefon, skutečný ovladač a Safari ověřeny nebyly. Vyvážení herních čísel je odhad; testy hlídají logiku, ne zábavnost.
+- Uložená data: verze 3 používá klíče `dinos3:*` a záznamy verze 2 (`dinos-best-*`, `drap-best`, `dinos-settings-v2`) jen čte, nemění je.
