@@ -58,7 +58,7 @@ for (const p of [...files, ...fonts]) {
   assets[p] = 'data:' + mime[p.split('.').pop()] + ';base64,' + b.toString('base64');
 }
 const compiled = await build({
-  entryPoints: [resolve(root, 'src/main.mjs')],
+  entryPoints: [resolve(root, 'src/app.mjs')],
   bundle: true,
   write: false,
   format: 'iife',
@@ -74,7 +74,7 @@ let html = await readFile(resolve(root, 'index.html'), 'utf8');
 html = html.replace('<link rel="stylesheet" href="/src/style.css">', () => '<style>' + css + '</style>');
 const fontless = Object.fromEntries(Object.entries(assets).filter(([p]) => !p.startsWith('fonts/')));
 html = html.replace(
-  '<script type="module" src="/src/main.mjs"></script>',
+  '<script type="module" src="/src/app.mjs"></script>',
   () =>
     '<script>window.DINO_ASSETS=' +
     JSON.stringify(fontless) +
@@ -86,10 +86,10 @@ const inlineScripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)
 if (inlineScripts.length !== 2) throw Error('Standalone must contain exactly two scripts');
 for (const [i, m] of inlineScripts.entries()) new Script(m[1], { filename: 'standalone-' + i + '.js' });
 await mkdir(resolve(root, 'dist'), { recursive: true });
-const dest = resolve(root, 'dist/Dinos_2_Stezka_oziva.html');
+const dest = resolve(root, 'dist/Dinos_3.html');
 await writeFile(dest, html);
 await writeFile(
   resolve(root, 'dist/asset-manifest.json'),
-  JSON.stringify({ version: '2.7.1', assets: [...files, ...fonts], inline: true, bytes: (await stat(dest)).size }, null, 2),
+  JSON.stringify({ version: '3.0.0', assets: [...files, ...fonts], inline: true, bytes: (await stat(dest)).size }, null, 2),
 );
 console.log('Built', dest, (await stat(dest)).size, 'bytes; all', files.length + fonts.length, 'assets inline.');

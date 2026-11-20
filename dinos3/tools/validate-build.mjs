@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { Script, runInNewContext } from 'node:vm';
 import { createHash } from 'node:crypto';
-const html = await readFile(new URL('../dist/Dinos_2_Stezka_oziva.html', import.meta.url), 'utf8');
+const html = await readFile(new URL('../dist/Dinos_3.html', import.meta.url), 'utf8');
 const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
 if (scripts.length !== 2) throw Error('Nesprávný počet skriptů');
 for (const [i, s] of scripts.entries()) new Script(s[1], { filename: 'final-' + i + '.js' });
@@ -21,7 +21,7 @@ if (/<(?:script|link)\b[^>]*(?:src|href)=["']\/(?!\/)/i.test(html)) throw Error(
 console.log(
   JSON.stringify(
     {
-      version: '2.7.1',
+      version: '3.0.0',
       inlineScripts: scripts.length,
       embeddedBinaryAssets: Object.keys(assets).length,
       embeddedFonts: 4,
